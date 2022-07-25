@@ -11,7 +11,7 @@
       <form method="post">
         {% csrf_token %}
 
-        <div class="form-group">
+        <div class="form-group mt-3">
           {{ form.email.label_tag }}
           <input type="email" class="form-control {% if form.email.errors %}is-invalid{% endif %}" id="id_email"
             name="email" value='{{ form.email.value|default:"" }}'>
@@ -20,7 +20,43 @@
           {% endif %}
         </div>
 
-        <div class="form-group">
+        <div class="form-group mt-3">
+          {{ form.first_name.label_tag }}
+          <input type="text" class="form-control {% if form.first_name.errors %}is-invalid{% endif %}" id="id_first_name"
+            name="first_name" value='{{ form.first_name.value|default:"" }}'>
+          {% if form.first_name.errors %}
+          <div class="invalid-feedback">{{ form.first_name.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group mt-3">
+          {{ form.last_name.label_tag }}
+          <input type="text" class="form-control {% if form.last_name.errors %}is-invalid{% endif %}" id="id_last_name"
+            name="last_name" value='{{ form.last_name.value|default:"" }}'>
+          {% if form.last_name.errors %}
+          <div class="invalid-feedback">{{ form.last_name.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group mt-3">
+          {{ form.birth_date.label_tag }}
+          <input type="date" class="form-control {% if form.birth_date.errors %}is-invalid{% endif %}" id="id_birth_date"
+            name="birth_date" value='{{ form.birth_date.value|default:"" }}'>
+          {% if form.birth_date.errors %}
+          <div class="invalid-feedback">{{ form.birth_date.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group mt-3">
+          {{ form.city.label_tag }}
+          <input type="text" class="form-control {% if form.city.errors %}is-invalid{% endif %}" id="id_city"
+            name="city" value='{{ form.city.value|default:"" }}'>
+          {% if form.city.errors %}
+          <div class="invalid-feedback">{{ form.city.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group mt-3">
           {{ form.password1.label_tag }}
           <input type="password" class="form-control {% if form.password1.errors %}is-invalid{% endif %}"
             id="id_password1" name="password1" value='{{ form.password1.value|default:"" }}'>
@@ -30,7 +66,7 @@
           {% endif %}
         </div>
 
-        <div class="form-group">
+        <div class="form-group mt-3">
           {{ form.password2.label_tag }}
           <input type="password" class="form-control {% if form.password2.errors %}is-invalid{% endif %}"
             id="id_password2" name="password2" value='{{ form.password2.value|default:"" }}'>
