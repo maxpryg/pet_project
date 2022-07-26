@@ -40,6 +40,8 @@
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
+
+  {% comment %}
           <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
             <ul class="navbar nav me-auto mb-2 bm-lg-0">
               <li class="nav-item"><a class="nav-link fs-5 fst-italic" href="{% url 'blog:posts' %}">Posts</a></li>
@@ -49,14 +51,20 @@
                   <ul class="dropdown-menu">
                     <li><a class="dropdown-item fst-italic" href="{% url 'blog:author_profile' request.user.id %}">Profile</a></li>
                     <li><a class="dropdown-item fst-italic" href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
+                    <li><a class="dropdown-item fst-italic" href="{% url 'password_change'%}">Change password</a></li>
                   </ul>
                 </li>
               {% else %}
                 <li class="nav-item"><a class="nav-link fs-5 fst-italic" href="{% url 'accounts:signup' %}">Sign up</a></li>
-                <li class="nav-item"><a class="nav-link fs-5 fst-italic" href="{% url 'login' %}">Login</a></li>
+                <li class="nav-item"><a class="nav-link fs-5 fst-italic" href="{% url 'login' %}?next={{ request.path }}">Login</a></li>
               {% endif %}
             </ul>
+            <form method="GET" action="{% url 'blog:search_blogs' %}" class="d-flex" role="search">
+              <input class="form-control me-2" type="search" name="search_text" placeholder="Search blogs" aria-label="Search">
+              <button class="btn btn-outline-primary" type="submit">Search</button>
+            </form>
           </div>
+  {% endcomment %}
         </div>
       </nav>
     </div>
