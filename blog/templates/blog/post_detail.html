@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1 class="text-primary">{{ post.title }}</h1>
+  <p>
+    <strong>Author:</strong> <a class="text-decoration-none fw-bold" href="{% url 'minipost:author_detail' post.author.id %}">{{ post.author.username }}</a>
+  </p>
+  <p>{{ post.body }}</p>
+  <div class="clearfix">
+    <ul class="float-end list-unstyled">
+      <li><small><strong>Created: </strong>{{ post.created_at }}</small></li>
+      <li><small><strong>Last Updated: </strong> {{ post.updated_at }}</small></li>
+    </ul>
+  </div>
+  <h6 class="card-title text-primary ">Comments</h6>
+
+  {% if comments %}
+    {% for comment in comments %}
+      <div class="card mt-2">
+        <div class="card-body">
+          <p>{{ comment.body }}</p>
+          <p>
+            <span><small><a class="text-decoration-none fw-bold" href="{{ comment.author.get_absolute_url }}">{{ comment.author}}</a></small></span>
+            <span class="float-end"><small>{{ comment.updated_at}}</small></span>
+          </p>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>There are no comments yet.</p>
+  {% endif %}
+
+  {% if user.is_authenticated %}
+    <div class="card mt-2">
+      <div class="card-body">
+          <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+              <input type="textarea" class="form-control {% if form.body.errors %}is-invalid{% endif %}" id="id_body"
+                name="body" placeholder="Leave your comment here..." value='{{ form.body.value|default:"" }}'>
+              {% if form.body.errors %}
+                <div class="invalid-feedback">{{ form.body.errors }}</div>
+              {% endif %}
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Post comment</button>
+          </form>
+      </div>
+    </div>
+  {% endif %}
+
+{% endblock %}
