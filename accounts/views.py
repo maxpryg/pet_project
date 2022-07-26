@@ -9,7 +9,7 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse_lazy
 #from django.views.generic.edit import CreateView
 
-from .forms import CustomUserCreationForm, token_generator
+from .forms import CustomUserCreationForm, token_generator, LoginForm
 
 
 user_model = get_user_model()
@@ -26,6 +26,11 @@ class SignUpView(CreateView):
         user.save()
         form.send_activation_email(self.request, user)
         return to_return
+
+
+class CustomLoginView(LoginView):
+    template_name = 'registration/login.html'
+    form_class = LoginForm
 
 
 class ActivateView(RedirectView):

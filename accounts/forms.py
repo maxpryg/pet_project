@@ -1,8 +1,10 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.template.loader import render_to_string
+from django.core.exceptions import ValidationError
 
 from .models import CustomUser
 from .tokens import token_generator
@@ -35,3 +37,10 @@ class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = CustomUser
         fields = ('email',)
+
+
+class LoginForm(AuthenticationForm):
+    def confirm_login_allowed(self, user):
+        if not user.email_verified:
+            raise ValidationError('Please, verify your email.',
+                                  code='email_not_verified')
