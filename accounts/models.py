@@ -9,6 +9,7 @@ class CustomUser(AbstractUser):
     email = models.EmailField('email address', unique=True)
     city = models.CharField(max_length=30, blank=True)
     birth_date = models.DateField(null=True, blank=True)
+    email_verified = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
