@@ -1,7 +1,13 @@
 {% extends 'base.html' %}
 
+{% block title %}
+  <title>Activation link broken</title>
+{% endblock %}
+
 {% block content %}
-<div>
-    <h2>It looks like your verification link is broken...</h2>
-</div>
-{% endblock content %}
+  <div class="card">
+    <div class="card-body">
+      <h2 class="card-title text-danger text-opacity-50 fw-bolder">It looks like your verification link is broken. Please, paste the correct link.</h2>
+    </div>
+  </div>
+{% endblock %}
