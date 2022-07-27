@@ -14,7 +14,7 @@ class Post(models.Model):
     likes = models.IntegerField()
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['title']
 
     def __str__(self):
         return self.title
