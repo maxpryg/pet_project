@@ -35,4 +35,3 @@ class PostListView(generic.ListView):
 
 class PostDetailView(generic.DetailView):
     model = Post
-    paginate_by = 5

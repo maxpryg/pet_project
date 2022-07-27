@@ -1,5 +1,9 @@
 from django.shortcuts import render
-from django.views.generic import CreateView, TemplateView, RedirectView
+from django.views.generic import (CreateView,
+                                  UpdateView,
+                                  TemplateView,
+                                  RedirectView,
+                                  DetailView)
 from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
 from django.utils.http import urlsafe_base64_decode
@@ -7,7 +11,6 @@ from django.utils.encoding import force_str
 from django.contrib.auth import get_user_model
 
 from django.urls import reverse_lazy
-#from django.views.generic.edit import CreateView
 
 from .forms import CustomUserCreationForm, token_generator, LoginForm
 
@@ -33,6 +36,15 @@ class CustomLoginView(LoginView):
     form_class = LoginForm
 
 
+class ProfileView(UpdateView):
+    model = user_model
+    fields = ['first_name', 'last_name', 'birth_date', 'city']
+    template_name = 'accounts/profile.html'
+
+    def get_queryset(self):
+        return user_model.objects.filter(id=self.request.user.id)
+
+
 class ActivateView(RedirectView):
     url = reverse_lazy('success')
 
@@ -49,7 +61,8 @@ class ActivateView(RedirectView):
             login(request, user)
             return super().get(request, uidb64, token)
         else:
-            return render(request, 'registration/activate_account_invalid.html')
+            return render(request,
+                          'registration/activate_account_invalid.html')
 
 
 class CheckEmailView(TemplateView):

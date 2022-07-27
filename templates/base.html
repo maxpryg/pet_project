@@ -30,7 +30,7 @@
     <link href="https://fonts.googleapis.com/css?family=Playfair&#43;Display:700,900&amp;display=swap" rel="stylesheet">
   </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
   <!-- MENU CONTAINER -->
   <div class="container">
     <!-- MAIN MENU -->
@@ -42,7 +42,6 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
             <ul class="navbar nav me-auto mb-2 bm-lg-0">
-              {% comment %}<li class="nav-item"><a class="nav-link fs-5 fst-italic" href="{% url 'blog:post_list' %}">Posts</a></li>{% endcomment %}
               <li class="nav-item">
                 <a class="text-decoration-none fs-5 fst-italic" href="{% url 'blog:post_list' %}">
                   {% load static %}
@@ -50,13 +49,19 @@
                 </a>
               </li>
               {% if user.is_authenticated %}
+                <li class="nav-item"><a class="nav-link fs-5 fst-italic" href="{% url 'accounts:profile' request.user.id%}">{{ user.full_name }}</a></li>
+                <li class="nav-item"><a class="nav-link fs-5 fst-italic" href="{% url 'logout' %}">Logout</a></li>
+
+{% comment %}
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle fs-5 fst-italic text-success" data-bs-toggle="dropdown" href="#">{{ user.full_name }}</a>
                   <ul class="dropdown-menu">
-                    {% comment %}<li><a class="dropdown-item fst-italic" href="{% url 'blog:author_profile' request.user.id %}">Profile</a></li>{% endcomment %}
-                    <li><a class="dropdown-item fst-italic" href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
+                    <li><a class="dropdown-item fst-italic" href="{% url 'blog:author_profile' request.user.id %}">Profile</a></li>
+                    <li><a class="dropdown-item fst-italic" href="{% url 'logout'%}">Logout</a></li>
                   </ul>
                 </li>
+{% endcomment %}
+
               {% else %}
                 <li class="nav-item"><a class="nav-link fs-5 fst-italic" href="{% url 'accounts:signup' %}">Sign up</a></li>
                 <li class="nav-item"><a class="nav-link fs-5 fst-italic" href="{% url 'login' %}">Login</a></li>
@@ -90,9 +95,30 @@
   <!-- END MAIN CONTAINER -->
 
   <!-- FOOTER -->
-  <footer class="blog-footer container">
-    <p>
-    </p>
+  <footer class="mt-auto container">
+    <div class="nav-scroller py-1 mb-2">
+      <nav class="navbar navbar-dark rounded bg-dark navbar-expand-lg d-flex justify-content-center">
+        <div class="container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+            <ul class="navbar nav me-auto mb-2 bm-lg-0">
+              <li class="nav-item">
+                <a class="text-decoration-none fs-5 fst-italic" href="{% url 'blog:post_list' %}">
+                  {% load static %}
+                  <img src="{% static 'blog/logo/logo.jpeg' %}" alt="Logo" width="30" height="30" class="d-inline-block align-text-top">
+                </a>
+              </li>
+              {% if user.is_authenticated %}
+                <li class="nav-item"><a class="nav-link fs-5 fst-italic" href="{% url 'accounts:profile' request.user.id %}">{{ user.full_name }}</a></li>
+              {% endif %}
+                <li class="nav-item"><a class="nav-link fs-5 fst-italic" href="https://github.com/maxpryg/pet_project">Github</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
   </footer>
   <!-- END FOOTER -->
 </body>
