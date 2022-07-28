@@ -3,6 +3,7 @@ from django.db import models
 from django.shortcuts import reverse
 
 from .managers import CustomUserManager
+from blog.models import Post
 
 
 class CustomUser(AbstractUser):
@@ -26,3 +27,6 @@ class CustomUser(AbstractUser):
     def get_absolute_url(self):
         return reverse('accounts:profile', args=[str(self.id)])
         pass
+
+    def post_count(self):
+        return Post.objects.filter(author=self).count()

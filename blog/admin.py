@@ -9,7 +9,18 @@ class ImageAdmin(admin.StackedInline):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
+    readonly_fields = ('fullname', 'short_description', 'likes_count',
+                       'comments_count')
+    list_display = ('title', 'short_description', 'fullname', 'likes_count',
+                    'comments_count')
+    search_fields = ('title',)
+    list_filter = ('author',)
+    fields = ('title', 'body', 'fullname', 'likes_count', 'comments_count')
     inlines = [ImageAdmin]
+
+    @admin.display
+    def fullname(self, obj):
+        return obj.author.full_name()
 
     class Meta:
         model = Post

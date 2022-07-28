@@ -20,18 +20,32 @@ class Post(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        """Returns the URL to access a detail record for this blog."""
+        """Returns the URL to access a detail record for this post."""
         return reverse('blog:blog_detail', args=[str(self.id)])
+
+    def short_description(self):
+        return self.body[:100]
+
+    def likes_count(self):
+        return self.likes
+
+    def comments_count(self):
+        return self.comment_set.count()
+
+    def main_image(self):
+        return self.image_set.filter(is_main_image=True)
 
 
 class Image(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     name = models.CharField('Name', max_length=100)
     is_main_image = models.BooleanField(default=False)
-    image = VersatileImageField('Image', upload_to='images/',
-                                width_field='width', height_field='height')
-    height = models.PositiveIntegerField('Image Height', blank=True, null=True)
-    width = models.PositiveIntegerField('Image Width', blank=True, null=True)
+    image = VersatileImageField('Image', upload_to='images/')
+
+#     image = VersatileImageField('Image', upload_to='images/',
+#                                 width_field='width', height_field='height')
+#     height = models.PositiveIntegerField('Image Height', blank=True, null=True)
+#     width = models.PositiveIntegerField('Image Width', blank=True, null=True)
 
     class Meta:
         verbose_name = 'Image'
