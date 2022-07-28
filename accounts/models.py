@@ -4,13 +4,17 @@ from django.shortcuts import reverse
 
 from .managers import CustomUserManager
 from blog.models import Post
+from django.utils import timezone
 
 
 class CustomUser(AbstractUser):
     username = None
     email = models.EmailField('email address', unique=True)
-    city = models.CharField(max_length=30, blank=True)
-    birth_date = models.DateField(null=True, blank=True)
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+    city = models.CharField(max_length=30)
+    #birth_date = models.DateField(default=timezone.now())
+    birth_date = models.DateField()
     email_verified = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'

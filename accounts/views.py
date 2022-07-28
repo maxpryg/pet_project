@@ -4,6 +4,7 @@ from django.views.generic import (CreateView,
                                   TemplateView,
                                   RedirectView,
                                   DetailView)
+from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
 from django.utils.http import urlsafe_base64_decode
@@ -20,7 +21,7 @@ user_model = get_user_model()
 
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm
-    success_url = reverse_lazy("check_email")
+    success_url = reverse_lazy("accounts:check_email")
     template_name = "registration/signup.html"
 
     def form_valid(self, form):
@@ -36,17 +37,18 @@ class CustomLoginView(LoginView):
     form_class = LoginForm
 
 
-class ProfileView(UpdateView):
+class ProfileView(SuccessMessageMixin, UpdateView):
     model = user_model
     fields = ['first_name', 'last_name', 'birth_date', 'city']
     template_name = 'accounts/profile.html'
+    success_message = 'Profile has been successfully updated!!!!'
 
     def get_queryset(self):
         return user_model.objects.filter(id=self.request.user.id)
 
 
 class ActivateView(RedirectView):
-    url = reverse_lazy('success')
+    url = reverse_lazy('accounts:success')
 
     def get(self, request, uidb64, token):
         try:
