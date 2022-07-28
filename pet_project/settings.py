@@ -117,6 +117,8 @@ USE_I18N = True
 
 USE_TZ = True
 
+USE_L10N = False
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
@@ -138,3 +140,8 @@ EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
 
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
+
+DATETIME_FORMAT: '%d/%m/%Y %H:%M:%S'
+DATE_FORMAT: '%d/%m/%Y'
+DATETIME_INPUT_FORMATS: ['%d-%m-%Y %H:%M:%S',]
+DATE_INPUT_FORMATS: ['%d-%m-%Y',]

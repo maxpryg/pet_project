@@ -11,7 +11,7 @@ class Post(models.Model):
                                on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     body = models.TextField(max_length=10000, help_text='Enter a post text')
-    likes = models.IntegerField()
+    likes = models.IntegerField(default=0)
 
     class Meta:
         ordering = ['title']

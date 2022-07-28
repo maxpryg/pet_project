@@ -21,10 +21,10 @@ class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = CustomUser
-    list_display = ('email', 'first_name', 'last_name', 'city', 'post_count')
+    list_display = ('first_name', 'last_name', 'city', 'post_count')
+    search_fields = ('first_name', 'last_name')
     readonly_fields = ('email', 'first_name', 'last_name', 'city',
                        'birth_date', 'post_count')
-    search_fields = ('first_name', 'last_name')
     fieldsets = (
         (None, {'fields': ('first_name', 'last_name', 'city', 'birth_date',
                            'post_count')}),

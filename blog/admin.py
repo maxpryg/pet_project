@@ -15,7 +15,7 @@ class PostAdmin(admin.ModelAdmin):
                     'comments_count')
     search_fields = ('title',)
     list_filter = ('author',)
-    fields = ('title', 'body', 'fullname', 'likes_count', 'comments_count')
+    fields = ('author', 'title', 'body', 'fullname', 'likes_count', 'comments_count')
     inlines = [ImageAdmin]
 
     @admin.display
