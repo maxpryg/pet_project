@@ -42,8 +42,15 @@ class CustomUserChangeForm(UserChangeForm):
 class LoginForm(AuthenticationForm):
 
     def confirm_login_allowed(self, user):
-        error_msg = """We cannot log you in, until you don't verify your email.
-                Please, check your email box and follow the confimation link."""
+        verification_error_msg = """We cannot log you in, until you don't
+        verify your email. Please, check your email box and follow the
+        confimation link."""
+
+        blocked_user_error_msg = """You account is blocked. Please contact
+        system administrator."""
 
         if not user.email_verified:
-            raise ValidationError(error_msg, code='email_not_verified')
+            raise ValidationError(verification_error_msg, code='email_not_verified')
+
+        if user.blocked:
+            raise ValidationError(blocked_user_error_msg, code='user_blocked')

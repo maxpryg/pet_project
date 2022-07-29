@@ -5,17 +5,11 @@
   {% if post_list %}
   <div class="list-group">
     {% for post in post_list %}
-    <a href="{{ post.get_absolute_url }}" class="list-group-item list-group-item-action mt-3">
-      <div class="d-flex w-100 justify-content-between">
-        <h2 class="mb-1">{{ post.title }}</h5>
-        <p><span class="badge bg-primary lh-sm"><small>{{ post.comment_set.count }} comments</small></span></p>
-      </div>
+    <a href="{{ post.get_absolute_url }}" class="list-group-item list-group-item-action mt-3 border-top rounded">
+      <img src="{{ post.main_image.get_thumbnail_url }}" class="float-start img-thumbnail me-3" alt="{{ post.main_image.name }}">
+      <h2 class="mb-1">{{ post.title }}</h5>
       <p class="mb-1">{{ post.body|slice:":200" }} ...</p>
-      <span><a class="text-decoration-none fw-bold" href="{{ post.author.get_absolute_url }}">{{ post.author}}</a></span>
     </a>
-      <p>
-        <span class="float-end"><small>Updated: {{ post.updated_at}}</small></span>
-      </p>
     {% endfor %}
   </div>
   {% else %}

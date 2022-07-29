@@ -1,0 +1,12 @@
+!!!!
+Fill date on profile udpate page
+
+ADMIN
+Прибрати всі пости і користувача з API.
+Прибрати пост з API.
+
+
+Remove author from admin Post detail page
+Remove published field in admin Post model
+Remove blocked field in admin User model
+Add style to post_detail page

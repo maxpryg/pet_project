@@ -16,6 +16,7 @@ class CustomUser(AbstractUser):
     #birth_date = models.DateField(default=timezone.now())
     birth_date = models.DateField()
     email_verified = models.BooleanField(default=False)
+    blocked = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -34,3 +35,7 @@ class CustomUser(AbstractUser):
 
     def post_count(self):
         return Post.objects.filter(author=self).count()
+
+
+class Dashboard(CustomUser):
+    pass

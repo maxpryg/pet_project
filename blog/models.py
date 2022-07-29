@@ -12,6 +12,7 @@ class Post(models.Model):
     title = models.CharField(max_length=200)
     body = models.TextField(max_length=10000, help_text='Enter a post text')
     likes = models.IntegerField(default=0)
+    blocked = models.BooleanField(default=True)
     main_image = models.OneToOneField('MainImage', on_delete=models.CASCADE,
                                       null=True)
     additional_images = models.ManyToManyField('AdditionalImage')
@@ -24,7 +25,7 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         """Returns the URL to access a detail record for this post."""
-        return reverse('blog:blog_detail', args=[str(self.id)])
+        return reverse('blog:post_detail', args=[str(self.id)])
 
     def short_description(self):
         return self.body[:100]
@@ -45,6 +46,12 @@ class MainImage(models.Model):
     def __str__(self):
         return self.name
 
+    def cropped_image_url(self):
+        return self.image.crop['400x400'].url
+
+    def get_thumbnail_url(self):
+        return self.image.thumbnail['100x100'].url
+
 
 class AdditionalImage(models.Model):
     name = models.CharField('Name', max_length=100)
@@ -54,6 +61,12 @@ class AdditionalImage(models.Model):
 
     def __str__(self):
         return self.name
+
+    def cropped_image_url(self):
+        return self.image.crop['300x300'].url
+
+    def get_thumbnail_url(self):
+        return self.image.thumbnail['100x100'].url
 
 
 # class Image(models.Model):
