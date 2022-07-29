@@ -22,6 +22,7 @@ class CustomUserAdmin(UserAdmin):
     form = CustomUserChangeForm
     model = CustomUser
     list_display = ('first_name', 'last_name', 'city', 'post_count')
+    list_filter = []
     search_fields = ('first_name', 'last_name')
     readonly_fields = ('email', 'first_name', 'last_name', 'city',
                        'birth_date', 'post_count')

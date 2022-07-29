@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.shortcuts import reverse
 
-from versatileimagefield.fields import VersatileImageField
+from versatileimagefield.fields import VersatileImageField, PPOIField
 
 
 class Post(models.Model):
@@ -12,6 +12,9 @@ class Post(models.Model):
     title = models.CharField(max_length=200)
     body = models.TextField(max_length=10000, help_text='Enter a post text')
     likes = models.IntegerField(default=0)
+    main_image = models.OneToOneField('MainImage', on_delete=models.CASCADE,
+                                      null=True)
+    additional_images = models.ManyToManyField('AdditionalImage')
 
     class Meta:
         ordering = ['title']
@@ -32,27 +35,45 @@ class Post(models.Model):
     def comments_count(self):
         return self.comment_set.count()
 
-    def main_image(self):
-        return self.image_set.filter(is_main_image=True)
 
-
-class Image(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+class MainImage(models.Model):
     name = models.CharField('Name', max_length=100)
-    is_main_image = models.BooleanField(default=False)
-    image = VersatileImageField('Image', upload_to='images/')
-
-#     image = VersatileImageField('Image', upload_to='images/',
-#                                 width_field='width', height_field='height')
-#     height = models.PositiveIntegerField('Image Height', blank=True, null=True)
-#     width = models.PositiveIntegerField('Image Width', blank=True, null=True)
-
-    class Meta:
-        verbose_name = 'Image'
-        verbose_name_plural = 'Images'
+    image = VersatileImageField('Image', upload_to='media/images/',
+                                ppoi_field='image_ppoi')
+    image_ppoi = PPOIField()
 
     def __str__(self):
         return self.name
+
+
+class AdditionalImage(models.Model):
+    name = models.CharField('Name', max_length=100)
+    image = VersatileImageField('Image', upload_to='media/images/',
+                                ppoi_field='image_ppoi')
+    image_ppoi = PPOIField()
+
+    def __str__(self):
+        return self.name
+
+
+# class Image(models.Model):
+#     post = models.ForeignKey(Post, on_delete=models.CASCADE)
+#     name = models.CharField('Name', max_length=100)
+#     is_main_image = models.BooleanField(default=False)
+#     image = VersatileImageField('Image', upload_to='media/images/',
+#                                 default='default.jpg')
+#
+# #     image = VersatileImageField('Image', upload_to='images/',
+# #                                 width_field='width', height_field='height')
+# #     height = models.PositiveIntegerField('Image Height', blank=True, null=True)
+# #     width = models.PositiveIntegerField('Image Width', blank=True, null=True)
+#
+#     class Meta:
+#         verbose_name = 'Image'
+#         verbose_name_plural = 'Images'
+#
+#     def __str__(self):
+#         return self.name
 
 
 class Comment(models.Model):

@@ -1,10 +1,6 @@
 from django.contrib import admin
 
-from .models import Post, Image
-
-
-class ImageAdmin(admin.StackedInline):
-    model = Image
+from .models import Post, MainImage, AdditionalImage
 
 
 @admin.register(Post)
@@ -15,8 +11,8 @@ class PostAdmin(admin.ModelAdmin):
                     'comments_count')
     search_fields = ('title',)
     list_filter = ('author',)
-    fields = ('author', 'title', 'body', 'fullname', 'likes_count', 'comments_count')
-    inlines = [ImageAdmin]
+    fields = ('author', 'title', 'body', 'main_image', 'additional_images',
+              'fullname', 'likes_count', 'comments_count')
 
     @admin.display
     def fullname(self, obj):
@@ -26,6 +22,19 @@ class PostAdmin(admin.ModelAdmin):
         model = Post
 
 
-@admin.register(Image)
-class ImageAdmin(admin.ModelAdmin):
-    pass
+@admin.register(MainImage)
+class MainImageAdmin(admin.ModelAdmin):
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
+
+
+@admin.register(AdditionalImage)
+class AdditionalImageAdmin(admin.ModelAdmin):
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
