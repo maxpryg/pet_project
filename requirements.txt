@@ -6,3 +6,5 @@ djangorestframework
 django-filter
 django-versatileimagefield
 python-magic-debian-bin==0.4.25
+djangorestframework-simplejwt[crypto]
+django-filter

@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 
 import os
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'blog',
     'versatileimagefield',
     'rest_framework',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -151,8 +153,9 @@ DATE_INPUT_FORMATS: ['%d-%m-%Y',]
 
 
 # server media files
-MEDIA_URL = '/media/'
+#MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = "http://localhost/media/"
 
 VERSATILEIMAGEFIELD_SETTINGS = {
     # The amount of time, in seconds, that references to created images
@@ -195,4 +198,17 @@ VERSATILEIMAGEFIELD_SETTINGS = {
     # Whether to create progressive JPEGs. Read more about progressive JPEGs
     # here: https://optimus.io/support/progressive-jpeg/
     'progressive_jpeg': False
+}
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend'],
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=500),
 }
