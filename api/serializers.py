@@ -1,7 +1,11 @@
 from rest_framework import serializers
 
+from django.contrib.auth import get_user_model
 
 from blog.models import Comment, Post, AdditionalImage
+
+
+Author = get_user_model()
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -33,3 +37,12 @@ class PostSerializer(serializers.ModelSerializer):
         post =  Post.objects.create(**validated_data)
         #AdditionalImage.objects.create(post=post, **additional_images)
         return post
+
+
+class AuthorSerializer(serializers.ModelSerializer):
+    posts = serializers.PrimaryKeyRelatedField(read_only=True, many=True,
+                                                  source='post_set')
+
+    class Meta:
+        model = Author
+        fields = ('first_name', 'last_name', 'birth_date', 'city', 'posts')

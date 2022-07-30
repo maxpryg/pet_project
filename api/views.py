@@ -1,22 +1,16 @@
 from rest_framework import mixins
 from rest_framework import generics
 from rest_framework import filters
+from rest_framework import viewsets
 
-#from django_filters import rest_framework as filters
+
+from django.contrib.auth import get_user_model
 
 from blog.models import Comment, Post, MainImage
-from api.serializers import CommentSerializer, PostSerializer
+from api.serializers import CommentSerializer, PostSerializer, AuthorSerializer
 
 
-# class ProductFilter(filters.FilterSet):
-#     author = filters.CharFilter(lookup_expr='icontains',
-#                                 field_name='author__first_name')
-#     author = filters.CharFilter(lookup_expr='icontains',
-#                                 field_name='author__last_name')
-#
-#     class Meta:
-#         model = Post
-#         fields = ['author']
+Author = get_user_model()
 
 
 class CommentCreate(mixins.CreateModelMixin,
@@ -40,3 +34,8 @@ class PostViewSet(generics.ListCreateAPIView,
         serializer.save(**{'author': user,
                            'main_image': main_image
                            })
+
+
+class AuthorViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer

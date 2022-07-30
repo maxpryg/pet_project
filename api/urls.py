@@ -15,4 +15,7 @@ urlpatterns = [
          name='token_refresh'),
     path('comments/', views.CommentCreate.as_view(), name='comments'),
     path('posts/', views.PostViewSet.as_view(), name='posts'),
+    path('authors/', views.AuthorViewSet.as_view({'get': 'list'}), name='authors_list'),
+    path('authors/<int:pk>/', views.AuthorViewSet.as_view({'get': 'retrieve'}),
+         name='authors_detail'),
 ]
