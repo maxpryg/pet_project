@@ -2,13 +2,19 @@ from rest_framework import serializers
 
 from django.contrib.auth import get_user_model
 
-from blog.models import Comment, Post, AdditionalImage
+from versatileimagefield.serializers import VersatileImageFieldSerializer
+from rest_flex_fields.serializers import FlexFieldsModelSerializer
+
+
+from blog.models import Comment, Post, AdditionalImage, MainImage
 
 
 Author = get_user_model()
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    #author = serializers.ReadOnlyField(source='author.id')
+    #post = serializers.ReadOnlyField(source='post.title')
 
     class Meta:
         model = Comment
@@ -46,3 +52,35 @@ class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
         fields = ('first_name', 'last_name', 'birth_date', 'city', 'posts')
+
+
+class AuthorProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Author
+        fields = ('email', 'first_name', 'last_name', 'birth_date', 'city')
+
+
+class MainImageSerializer(serializers.ModelSerializer):
+    image = VersatileImageFieldSerializer(
+        sizes=[
+            ('full_size', 'url'),
+            ('thumbnail', 'thumbnail__100x100'),
+        ]
+    )
+
+    class Meta:
+        model = MainImage
+        fields = ['id', 'name', 'image']
+
+
+class AdditionalImageSerializer(serializers.ModelSerializer):
+    image = VersatileImageFieldSerializer(
+        sizes=[
+            ('full_size', 'url'),
+            ('thumbnail', 'thumbnail__100x100'),
+        ]
+    )
+
+    class Meta:
+        model = AdditionalImage
+        fields = ['id', 'name', 'image']

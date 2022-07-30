@@ -5,19 +5,32 @@ from rest_framework import viewsets
 
 
 from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 
-from blog.models import Comment, Post, MainImage
-from api.serializers import CommentSerializer, PostSerializer, AuthorSerializer
+from blog.models import Comment, Post, MainImage, AdditionalImage
+from api.serializers import (CommentSerializer,
+                             PostSerializer,
+                             AuthorSerializer,
+                             MainImageSerializer,
+                             AdditionalImageSerializer,
+                             AuthorProfileSerializer
+                             )
 
 
 Author = get_user_model()
 
 
 class CommentCreate(mixins.CreateModelMixin,
-                  generics.GenericAPIView):
+                    mixins.ListModelMixin,
+                    generics.GenericAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
 
 class PostViewSet(generics.ListCreateAPIView,
                   mixins.UpdateModelMixin):
@@ -42,3 +55,31 @@ class AuthorViewSet(viewsets.ReadOnlyModelViewSet):
 
     filter_backends = [filters.SearchFilter]
     search_fields = ['first_name', 'last_name']
+
+
+class AuthorProfileUpdate(generics.RetrieveUpdateAPIView):
+    queryset = Author.objects.all()
+    serializer_class = AuthorProfileSerializer
+
+    def get_object(self):
+        queryset = self.get_queryset()
+        obj = get_object_or_404(queryset, id=self.request.user.id)
+        return obj
+
+
+class MainImageCreate(mixins.CreateModelMixin,
+                      generics.GenericAPIView):
+    queryset = MainImage.objects.all()
+    serializer_class = MainImageSerializer
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+
+class AdditionalImageCreate(mixins.CreateModelMixin,
+                            generics.GenericAPIView):
+    queryset = AdditionalImage.objects.all()
+    serializer_class = AdditionalImageSerializer
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)

@@ -18,4 +18,8 @@ urlpatterns = [
     path('authors/', views.AuthorViewSet.as_view({'get': 'list'}), name='authors_list'),
     path('authors/<int:pk>/', views.AuthorViewSet.as_view({'get': 'retrieve'}),
          name='authors_detail'),
+    path('main_images/', views.MainImageCreate.as_view(), name='main_images'),
+    path('additional_images/', views.AdditionalImageCreate.as_view(),
+         name='additional_images'),
+    path('profile/', views.AuthorProfileUpdate.as_view(), name='comments'),
 ]
