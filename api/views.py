@@ -39,3 +39,6 @@ class PostViewSet(generics.ListCreateAPIView,
 class AuthorViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
+
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['first_name', 'last_name']
