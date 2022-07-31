@@ -7,5 +7,6 @@ django-filter
 django-versatileimagefield
 python-magic-debian-bin==0.4.25
 djangorestframework-simplejwt[crypto]
-django-filter
-drf-flex-fields
+celery==5.2.1
+flower==1.0.0
+redis==4.0.2

@@ -3,7 +3,6 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
 from versatileimagefield.serializers import VersatileImageFieldSerializer
-from rest_flex_fields.serializers import FlexFieldsModelSerializer
 
 
 from blog.models import Comment, Post, AdditionalImage, MainImage
