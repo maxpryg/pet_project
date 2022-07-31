@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from versatileimagefield.serializers import VersatileImageFieldSerializer
 
 
-from blog.models import Comment, Post, AdditionalImage, MainImage
+from blog.models import Comment, Post, AdditionalImage, MainImage, Subscriber
 
 
 Author = get_user_model()
@@ -83,3 +83,10 @@ class AdditionalImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = AdditionalImage
         fields = ['id', 'name', 'image']
+
+
+class SubscriberSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Subscriber
+        fields = ['email']

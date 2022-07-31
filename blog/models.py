@@ -98,3 +98,8 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'{self.body}[:50]'
+
+
+class Subscriber(models.Model):
+    """Model representing a subscriber"""
+    email = models.EmailField('email address', unique=True)

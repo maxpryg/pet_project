@@ -29,7 +29,7 @@ class CustomUserAdmin(UserAdmin):
                        'birth_date', 'post_count')
     fieldsets = (
         (None, {'fields': ('first_name', 'last_name', 'city', 'birth_date',
-                           'post_count', 'blocked')}),
+                           'post_count', 'blocked',)}),
     )
     actions = ['block_user']
 

@@ -17,6 +17,7 @@ class CustomUser(AbstractUser):
     birth_date = models.DateField()
     email_verified = models.BooleanField(default=False)
     blocked = models.BooleanField(default=False)
+    subscribers = models.ManyToManyField('CustomUser')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
