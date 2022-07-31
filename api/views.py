@@ -18,7 +18,7 @@ from api.serializers import (CommentSerializer,
                              AuthorProfileSerializer,
                              SubscriberSerializer,
                              )
-from api.tasks import send_mail_to
+#from api.tasks import send_mail_to
 
 
 Author = get_user_model()
