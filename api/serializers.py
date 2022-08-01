@@ -12,6 +12,10 @@ Author = get_user_model()
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    author = serializers.PrimaryKeyRelatedField(required=False,
+        queryset=Author.objects.all())
+    post = serializers.PrimaryKeyRelatedField(required=False,
+        queryset=Post.objects.all())
 
     class Meta:
         model = Comment
