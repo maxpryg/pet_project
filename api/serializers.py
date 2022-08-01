@@ -12,8 +12,6 @@ Author = get_user_model()
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    #author = serializers.ReadOnlyField(source='author.id')
-    #post = serializers.ReadOnlyField(source='post.title')
 
     class Meta:
         model = Comment
@@ -25,7 +23,8 @@ class PostSerializer(serializers.ModelSerializer):
                                        read_only=True)
     last_name = serializers.CharField(source='author.last_name',
                                       read_only=True)
-    main_image = serializers.CharField(source='main_image.image.url')
+    main_image = serializers.PrimaryKeyRelatedField(
+        queryset=MainImage.objects.all())
     additional_images = serializers.PrimaryKeyRelatedField(
         queryset=AdditionalImage.objects.all(),
         many=True,
@@ -33,15 +32,19 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'title', 'short_description', 'first_name',
+        fields = ['title', 'body', 'first_name',
                   'last_name', 'main_image', 'additional_images']
 
-    def create(self, validated_data):
-        #print('vdata:', validated_data.pop('additional_images'))
-        additional_images =  validated_data.pop('additional_images')
-        post =  Post.objects.create(**validated_data)
-        #AdditionalImage.objects.create(post=post, **additional_images)
-        return post
+    def to_representation(self, instance):
+        """Return first 100 chars of post body"""
+        representation = super().to_representation(instance)
+#         print('ret:', ret)
+#         print('type ret:', type(ret))
+        representation['body'] = representation['body'][:100]
+        main_img_id = representation.get('main_image')
+        main_img = MainImage.objects.get(id=main_img_id)
+        representation['main_image'] = main_img.image.url
+        return representation
 
 
 class AuthorSerializer(serializers.ModelSerializer):

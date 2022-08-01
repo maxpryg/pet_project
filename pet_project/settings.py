@@ -174,9 +174,9 @@ DATE_INPUT_FORMATS: ['%d-%m-%Y',]
 
 
 # server media files
-#MEDIA_URL = '/media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = "http://localhost/media/"
+#MEDIA_URL = 'http://127.0.0.1:8000/media/'
 
 VERSATILEIMAGEFIELD_SETTINGS = {
     # The amount of time, in seconds, that references to created images
@@ -228,6 +228,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend'],
+    'PAGE_SIZE': 3,
 }
 
 SIMPLE_JWT = {
@@ -235,9 +236,13 @@ SIMPLE_JWT = {
 }
 
 CELERY_BEAT_SCHEDULE = {
-    "sample_task": {
-        "task": "core.tasks.sample_task",
-        "schedule": crontab(minute="*/1"),
+    'sample_task': {
+        'task': 'api.tasks.sample_task',
+        'schedule': crontab(minute='*/1'),
+    },
+    'send_email_to_subscribers': {
+        'task': 'api.tasks.send_email_to_subscribers',
+        'schedule': crontab(day_of_week=6),
     },
 }
 

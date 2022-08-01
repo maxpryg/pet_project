@@ -11,20 +11,21 @@ from api import views
 
 router = routers.SimpleRouter()
 router.register(r'authors', views.AuthorViewSet)
+router.register(r'posts', views.PostViewSet)
 
 urlpatterns = [
     path('login/', TokenObtainPairView.as_view(),
          name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(),
          name='token_refresh'),
-    path('comments/', views.CommentCreate.as_view(), name='comment_create'),
-    path('posts/', views.PostViewSet.as_view(), name='posts'),
+    #path('comment/', views.CommentCreate.as_view(), name='comment_create'),
+    #path('posts/', views.PostViewSet.as_view(), name='posts'),
     path('subscribe/', views.SubscriberCreate.as_view(),
          name='subscriber_create'),
-    path('main_images/', views.MainImageCreate.as_view(),
+    path('main_image/', views.MainImageCreate.as_view(),
          name='main_image_create'),
-    path('additional_images/', views.AdditionalImageCreate.as_view(),
-         name='additional_images'),
+    path('additional_image/', views.AdditionalImageCreate.as_view(),
+         name='additional_image_create'),
     path('profile/', views.AuthorProfileUpdate.as_view(), name='comments'),
 ]
 

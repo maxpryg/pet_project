@@ -4,6 +4,9 @@ from rest_framework import filters
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.pagination import PageNumberPagination
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 from django.contrib.auth import get_user_model
@@ -36,24 +39,28 @@ class CommentCreate(mixins.CreateModelMixin,
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
-class PostViewSet(generics.ListCreateAPIView,
-                  mixins.UpdateModelMixin):
+
+class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    filter_backends = [filters.SearchFilter]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['author__first_name', 'author__last_name', 'author']
     search_fields = ['title']
+    pagination_class = PageNumberPagination
+
+    def get_permissions(self):
+        """Allow only GET method for unauthorized users"""
+        if self.request.method == 'GET':
+            permission_classes = [AllowAny]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
 
     def perform_create(self, serializer):
         user = self.request.user
-        main_image_id = self.request.data.get('main_image')
-        main_image = MainImage.objects.get(id=main_image_id)
-        serializer.save(**{'author': user,
-                           'main_image': main_image
-                           })
+        serializer.save(**{'author': user})
 
 
-#class AuthorViewSet(viewsets.ReadOnlyModelViewSet):
 class AuthorViewSet(viewsets.ModelViewSet):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
@@ -86,6 +93,7 @@ class MainImageCreate(mixins.CreateModelMixin,
                       generics.GenericAPIView):
     queryset = MainImage.objects.all()
     serializer_class = MainImageSerializer
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
@@ -95,6 +103,7 @@ class AdditionalImageCreate(mixins.CreateModelMixin,
                             generics.GenericAPIView):
     queryset = AdditionalImage.objects.all()
     serializer_class = AdditionalImageSerializer
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)

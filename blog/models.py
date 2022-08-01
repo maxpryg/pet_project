@@ -12,8 +12,8 @@ class Post(models.Model):
     title = models.CharField(max_length=200)
     body = models.TextField(max_length=10000, help_text='Enter a post text')
     likes = models.IntegerField(default=0)
-    blocked = models.BooleanField(default=True)
-    main_image = models.OneToOneField('MainImage', on_delete=models.CASCADE,
+    blocked = models.BooleanField(default=False)
+    main_image = models.ForeignKey('MainImage', on_delete=models.CASCADE,
                                       null=True)
     additional_images = models.ManyToManyField('AdditionalImage')
 
