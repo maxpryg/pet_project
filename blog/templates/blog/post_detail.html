@@ -4,33 +4,30 @@
   <h1 class="text-primary">{{ post.title }}</h1>
   <img src="{{ post.main_image.cropped_image_url }}" class="float-start me-3" alt="{{ post.main_image.name }}">
   <p>{{ post.body }}</p>
+
   {% if post.additional_images %}
     {% for image in post.additional_images.all %}
       <img src="{{ image.cropped_image_url }}" class="float-start me-3" alt="{{ image.name }}">
     {% endfor %}
   {% endif %}
-  {% comment %}
-  <p>
-    <strong>Author:</strong> <a class="text-decoration-none fw-bold" href="{% url 'minipost:author_detail' post.author.id %}">{{ post.author.username }}</a>
-  </p>
-  {% endcomment %}
+
   <div class="clearfix">
   </div>
   <div class="card-body">
     <p><strong>Author: </strong>{{ post.author.full_name }}, from {{ post.author.city }}</p>
     <p><strong>Likes: </strong>{{ post.likes }}</p>
-    <p><a class="text-decoration-none fw-bold" href="{% url 'blog:post_list' %}">More posts</a></p>
   </div>
 
   <div class="card mt-2">
     <div class="card-body">
-      {% if comments %}
-        {% for comment in comments %}
+      <h4 class="text-primary">Comments</h4>
+      {% if post.comment_set %}
+        {% for comment in post.comment_set.all %}
           <div class="card mt-2">
             <div class="card-body">
             <p>{{ comment.body }}</p>
             <p>
-              <span><small>{{ comment.author.full_name }}"</small></span>
+              <span class="fw-bold"><small>Left by {{ comment.author.full_name }}"</small></span>
             </p>
             </div>
           </div>
@@ -40,5 +37,6 @@
       {% endif %}
     </div>
   </div>
+  <p><a class="text-decoration-none fw-bold" href="{% url 'blog:post_list' %}">More posts</a></p>
 
 {% endblock %}

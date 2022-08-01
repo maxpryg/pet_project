@@ -11,6 +11,24 @@ from blog.models import Comment, Post, AdditionalImage, MainImage, Subscriber
 Author = get_user_model()
 
 
+class DynamicFieldsModelSerializer(serializers.ModelSerializer):
+    """
+    A ModelSerializer that takes an additional `fields` argument that
+    controls which fields should be excluded.
+    """
+    def __init__(self, *args, **kwargs):
+        # Don't pass the 'fields' arg up to the superclass
+        exclude_fields = kwargs.pop('fields', None)
+
+        # Instantiate the superclass normally
+        super().__init__(*args, **kwargs)
+
+        if exclude_fields is not None:
+            # Drop any fields that are specified in the `exclude_fields` argument.
+            for field in exclude_fields:
+                self.fields.pop(field)
+
+
 class CommentSerializer(serializers.ModelSerializer):
     author = serializers.PrimaryKeyRelatedField(required=False,
         queryset=Author.objects.all())
@@ -42,8 +60,6 @@ class PostSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         """Return first 100 chars of post body"""
         representation = super().to_representation(instance)
-#         print('ret:', ret)
-#         print('type ret:', type(ret))
         representation['body'] = representation['body'][:100]
         main_img_id = representation.get('main_image')
         main_img = MainImage.objects.get(id=main_img_id)
@@ -51,13 +67,13 @@ class PostSerializer(serializers.ModelSerializer):
         return representation
 
 
-class AuthorSerializer(serializers.ModelSerializer):
+class AuthorSerializer(DynamicFieldsModelSerializer):
     posts = serializers.PrimaryKeyRelatedField(read_only=True, many=True,
                                                   source='post_set')
-
     class Meta:
         model = Author
-        fields = ('first_name', 'last_name', 'birth_date', 'city', 'posts')
+        fields = ('email','first_name', 'last_name', 'birth_date', 'city',
+                  'posts')
 
 
 class AuthorProfileSerializer(serializers.ModelSerializer):

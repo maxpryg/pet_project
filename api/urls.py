@@ -10,7 +10,7 @@ from rest_framework_simplejwt.views import (
 from api import views
 
 router = routers.SimpleRouter()
-router.register(r'authors', views.AuthorViewSet)
+router.register(r'authors', views.AuthorViewSet, basename='authors')
 router.register(r'posts', views.PostViewSet)
 
 urlpatterns = [

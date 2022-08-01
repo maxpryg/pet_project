@@ -28,21 +28,8 @@ from api.serializers import (CommentSerializer,
 Author = get_user_model()
 
 
-# class CommentCreate(mixins.CreateModelMixin,
-#                     mixins.ListModelMixin,
-#                     generics.GenericAPIView):
-#     queryset = Comment.objects.all()
-#     serializer_class = CommentSerializer
-#
-#     def get(self, request, *args, **kwargs):
-#         return self.list(request, *args, **kwargs)
-#
-#     def post(self, request, *args, **kwargs):
-#         return self.create(request, *args, **kwargs)
-
-
 class PostViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.all()
+    queryset = Post.objects.exclude(blocked=True)
     serializer_class = PostSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['author__first_name', 'author__last_name', 'author']
@@ -80,17 +67,23 @@ class PostViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-#class AuthorViewSet(viewsets.ModelViewSet):
 class AuthorViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['first_name', 'last_name']
 
+    def list(self, request, pk=None):
+        queryset = Author.objects.all()
+        queryset = self.filter_queryset(queryset)
+        serializer = AuthorSerializer(queryset, many=True,
+                                      fields=('email', 'posts'))
+        return Response(serializer.data)
+
     def retrieve(self, request, pk=None):
         queryset = Author.objects.all()
         author = get_object_or_404(queryset, pk=pk)
-        serializer = AuthorSerializer(author)
+        serializer = AuthorSerializer(author, fields=('email',))
         return Response(serializer.data)
 
     @action(detail=True, methods=['get'])

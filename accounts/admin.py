@@ -17,6 +17,10 @@ class PostInline(admin.TabularInline):
         """Remove add button"""
         return False
 
+    def has_delete_permission(self, request, obj=None):
+        """Remove delete button"""
+        return False
+
 
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm

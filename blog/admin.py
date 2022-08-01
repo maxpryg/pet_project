@@ -11,7 +11,7 @@ class PostAdmin(admin.ModelAdmin):
                     'comments_count', 'blocked')
     search_fields = ('title',)
     list_filter = ('author',)
-    fields = ('author', 'title', 'body', 'main_image', 'additional_images',
+    fields = ('title', 'body', 'main_image', 'additional_images',
               'fullname', 'likes_count', 'comments_count', 'blocked')
     actions = ['block_post']
 
