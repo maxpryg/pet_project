@@ -1,6 +1,10 @@
 from django.contrib import admin
+from django.contrib.sites.models import Site
 
 from .models import Post, MainImage, AdditionalImage
+
+
+admin.site.unregister(Site)
 
 
 @admin.register(Post)
@@ -11,7 +15,7 @@ class PostAdmin(admin.ModelAdmin):
                     'comments_count', 'blocked')
     search_fields = ('title',)
     list_filter = ('author',)
-    fields = ('title', 'body', 'main_image', 'additional_images',
+    fields = ('author', 'title', 'body', 'main_image', 'additional_images',
               'fullname', 'likes_count', 'comments_count', 'blocked')
     actions = ['block_post']
 

@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'accounts',
     'blog',
     'versatileimagefield',
@@ -236,13 +237,10 @@ SIMPLE_JWT = {
 }
 
 CELERY_BEAT_SCHEDULE = {
-    'sample_task': {
-        'task': 'api.tasks.sample_task',
-        'schedule': crontab(minute='*/1'),
-    },
     'send_email_to_subscribers': {
         'task': 'api.tasks.send_email_to_subscribers',
-        'schedule': crontab(day_of_week=6),
+        "schedule": crontab(minute="0-30", hour="10,12", day_of_week="2"),
     },
 }
 
+SITE_ID = 1

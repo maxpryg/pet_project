@@ -7,10 +7,5 @@ logger = get_task_logger(__name__)
 
 
 @shared_task
-def sample_task():
-    logger.info('The sample task just ran.')
-
-
-@shared_task
 def send_email_to_subscribers():
     call_command('send_emails', )
