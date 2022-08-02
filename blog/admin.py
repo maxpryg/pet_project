@@ -1,7 +1,8 @@
 from django.contrib import admin
+#from pet_project.admin import DashboardAdminSite as admin
 from django.contrib.sites.models import Site
 
-from .models import Post, MainImage, AdditionalImage
+from .models import Post, MainImage, AdditionalImage, Comment
 
 
 admin.site.unregister(Site)
