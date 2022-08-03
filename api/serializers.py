@@ -50,6 +50,7 @@ class PostSerializer(serializers.ModelSerializer):
     additional_images = serializers.PrimaryKeyRelatedField(
         queryset=AdditionalImage.objects.all(),
         many=True,
+        allow_null=True
     )
 
     class Meta:

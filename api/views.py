@@ -32,7 +32,8 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.exclude(blocked=True)
     serializer_class = PostSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['author__first_name', 'author__last_name', 'author']
+    #filterset_fields = ['author__first_name', 'author__last_name', 'author']
+    filterset_fields = ['author']
     search_fields = ['title']
     pagination_class = PageNumberPagination
 
@@ -53,7 +54,8 @@ class PostViewSet(viewsets.ModelViewSet):
         comment = CommentSerializer(data=request.data)
         if comment.is_valid():
             comment.save(author=self.request.user, post=self.get_object())
-            return Response(comment.data)
+            return Response(comment.data,
+                            status=status.HTTP_201_CREATED)
         else:
             return Response(comment.errors,
                             status=status.HTTP_400_BAD_REQUEST)

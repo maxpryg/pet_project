@@ -15,7 +15,8 @@ class Post(models.Model):
     blocked = models.BooleanField(default=False)
     main_image = models.ForeignKey('MainImage', on_delete=models.CASCADE,
                                       null=True)
-    additional_images = models.ManyToManyField('AdditionalImage')
+    additional_images = models.ManyToManyField('AdditionalImage', blank=True,
+                                               null=True)
 
     class Meta:
         ordering = ['title']

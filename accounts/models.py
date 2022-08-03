@@ -1,10 +1,12 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.shortcuts import reverse
+from django.utils import timezone
+
+from datetime import date
 
 from .managers import CustomUserManager
 from blog.models import Post
-from django.utils import timezone
 
 
 class CustomUser(AbstractUser):
@@ -18,6 +20,7 @@ class CustomUser(AbstractUser):
     email_verified = models.BooleanField(default=False)
     blocked = models.BooleanField(default=False)
     subscribers = models.ManyToManyField('CustomUser')
+    created_at = models.DateField(default=date.today)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

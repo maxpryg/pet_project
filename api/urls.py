@@ -18,8 +18,6 @@ urlpatterns = [
          name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(),
          name='token_refresh'),
-    #path('comment/', views.CommentCreate.as_view(), name='comment_create'),
-    #path('posts/', views.PostViewSet.as_view(), name='posts'),
     path('subscribe/', views.SubscriberCreate.as_view(),
          name='subscriber_create'),
     path('main_image/', views.MainImageCreate.as_view(),
