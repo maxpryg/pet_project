@@ -14,8 +14,6 @@ from api.views import PostViewSet
 
 class PostViewSetTest(APITestCase):
     def setUp(self):
-        self.view = PostViewSet.as_view({'get': 'list'})
-
         self.author = CustomUser.objects.create(
             email='test@mail.com',
             password='password',

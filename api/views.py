@@ -12,6 +12,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AnonymousUser
 from django.shortcuts import get_object_or_404
 
 from blog.models import Post, MainImage, AdditionalImage, Subscriber
@@ -91,8 +92,10 @@ class AuthorViewSet(viewsets.ReadOnlyModelViewSet):
     @action(detail=True, methods=['get'])
     def subscribe(self, request, pk=None):
         author = self.get_object()
-        subscriber = self.request.user
-        author.subscribers.add(subscriber)
+        if not self.request.user.is_authenticated:
+            return Response('Unauthorized',
+                            status=status.HTTP_401_UNAUTHORIZED)
+        author.subscribers.add(self.request.user)
         serializer = self.get_serializer(author)
         return Response(serializer.data)
 
