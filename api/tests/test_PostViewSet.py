@@ -13,7 +13,7 @@ from api.serializers import PostSerializer, CommentSerializer
 
 class PostViewSetTest(APITestCase):
     def setUp(self):
-        self.author = CustomUser.objects.create(
+        self.author_1 = CustomUser.objects.create(
             email='test@mail.com',
             password='password',
             first_name='John',
@@ -22,26 +22,37 @@ class PostViewSetTest(APITestCase):
             birth_date=date.today(),
             email_verified=True
         )
+
+        self.author_2 = CustomUser.objects.create(
+            email='test2@mail.com',
+            password='password',
+            first_name='John',
+            last_name='Johnson',
+            city='London',
+            birth_date=date.today(),
+            email_verified=True
+        )
+
         self.main_image = Image.objects.create(
             name='main_image_1',
             image='media/test_images/test_main_image.jpg')
 
         self.post_1 = Post.objects.create(
-            author=self.author,
+            author=self.author_1,
             title='First Post title',
             body='First Post Body',
             main_image=self.main_image,
         )
 
         self.post_2 = Post.objects.create(
-            author=self.author,
+            author=self.author_1,
             title='Second Post title',
             body='Second Post Body',
             main_image=self.main_image,
         )
 
         self.post_3 = Post.objects.create(
-            author=self.author,
+            author=self.author_1,
             title='Third Post title',
             body='Third Post Body',
             main_image=self.main_image,
@@ -109,7 +120,7 @@ class PostViewSetTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_authenticated_can_create_post(self):
-        self.client.force_authenticate(user=self.author)
+        self.client.force_authenticate(user=self.author_1)
         response = self.client.post('/api/posts/',
                                     data=json.dumps(self.payload),
                                     content_type='application/json'
@@ -124,12 +135,20 @@ class PostViewSetTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_authenticated_can_patch_post(self):
-        self.client.force_authenticate(user=self.author)
+        self.client.force_authenticate(user=self.author_1)
         response = self.client.patch(f'/api/posts/{self.post_1.id}/',
                                      data=json.dumps(self.partial_payload),
                                      content_type='application/json'
                                      )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_another_author_cannot_patch_others_author_post(self):
+        self.client.force_authenticate(user=self.author_2)
+        response = self.client.patch(f'/api/posts/{self.post_1.id}/',
+                                     data=json.dumps(self.partial_payload),
+                                     content_type='application/json'
+                                     )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_anonymous_cannot_put_post(self):
         response = self.client.put(f'/api/posts/{self.post_1.id}/',
@@ -138,8 +157,16 @@ class PostViewSetTest(APITestCase):
                                    )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_another_author_cannot_put_others_author_post(self):
+        self.client.force_authenticate(user=self.author_2)
+        response = self.client.put(f'/api/posts/{self.post_1.id}/',
+                                     data=json.dumps(self.partial_payload),
+                                     content_type='application/json'
+                                     )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
     def test_authenticated_can_put_post(self):
-        self.client.force_authenticate(user=self.author)
+        self.client.force_authenticate(user=self.author_1)
         response = self.client.put(f'/api/posts/{self.post_1.id}/',
                                    data=json.dumps(self.full_payload),
                                    content_type='application/json'
@@ -147,7 +174,7 @@ class PostViewSetTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_authenticated_can_comment_post(self):
-        self.client.force_authenticate(user=self.author)
+        self.client.force_authenticate(user=self.author_2)
         response = self.client.post(f'/api/posts/{self.post_1.id}/comment/',
                                     data=json.dumps({'body': 'comment body'}),
                                     content_type='application/json'
@@ -165,7 +192,7 @@ class PostViewSetTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_authenticated_can_like_post(self):
-        self.client.force_authenticate(user=self.author)
+        self.client.force_authenticate(user=self.author_2)
         post = Post.objects.get(id=self.post_1.id)
         post_likes_before_like = post.likes
         response = self.client.post(f'/api/posts/{self.post_1.id}/like/')

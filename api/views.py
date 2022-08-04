@@ -5,6 +5,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import status
 
@@ -15,6 +16,7 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 
 from blog.models import Post, Image, Subscriber
+from api.permissions import IsOwnerOrReadOnly
 from api.serializers import (CommentSerializer,
                              PostSerializer,
                              AuthorSerializer,
@@ -31,18 +33,11 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.exclude(blocked=True)
     serializer_class = PostSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    #filterset_fields = ['author__first_name', 'author__last_name', 'author']
+    # filterset_fields = ['author__first_name', 'author__last_name', 'author']
     filterset_fields = ['author']
     search_fields = ['title']
     pagination_class = PageNumberPagination
-
-    def get_permissions(self):
-        """Allow only GET method for unauthorized users"""
-        if self.request.method == 'GET':
-            permission_classes = [AllowAny]
-        else:
-            permission_classes = [IsAuthenticated]
-        return [permission() for permission in permission_classes]
+    permission_classes = [IsOwnerOrReadOnly]
 
     def perform_create(self, serializer):
         user = self.request.user
