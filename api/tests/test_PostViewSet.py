@@ -6,10 +6,9 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from blog.models import Post, Comment, MainImage
+from blog.models import Post, Comment, Image
 from accounts.models import CustomUser
 from api.serializers import PostSerializer, CommentSerializer
-from api.views import PostViewSet
 
 
 class PostViewSetTest(APITestCase):
@@ -23,7 +22,7 @@ class PostViewSetTest(APITestCase):
             birth_date=date.today(),
             email_verified=True
         )
-        self.main_image = MainImage.objects.create(
+        self.main_image = Image.objects.create(
             name='main_image_1',
             image='media/test_images/test_main_image.jpg')
 

@@ -13,10 +13,13 @@ class Post(models.Model):
     body = models.TextField(max_length=10000, help_text='Enter a post text')
     likes = models.IntegerField(default=0)
     blocked = models.BooleanField(default=False)
-    main_image = models.ForeignKey('MainImage', on_delete=models.CASCADE,
-                                      null=True)
-    additional_images = models.ManyToManyField('AdditionalImage', blank=True,
-                                               null=True)
+    main_image = models.ForeignKey('Image', on_delete=models.CASCADE,
+                                   related_name='main_image',
+                                   null=True)
+    additional_images = models.ManyToManyField('Image',
+                                               blank=True,
+                                               related_name='additional_images'
+                                               )
 
     class Meta:
         ordering = ['title']
@@ -38,7 +41,7 @@ class Post(models.Model):
         return self.comment_set.count()
 
 
-class MainImage(models.Model):
+class Image(models.Model):
     name = models.CharField('Name', max_length=100)
     image = VersatileImageField('Image', upload_to='media/images/',
                                 ppoi_field='image_ppoi')
@@ -52,42 +55,6 @@ class MainImage(models.Model):
 
     def get_thumbnail_url(self):
         return self.image.thumbnail['100x100'].url
-
-
-class AdditionalImage(models.Model):
-    name = models.CharField('Name', max_length=100)
-    image = VersatileImageField('Image', upload_to='media/images/',
-                                ppoi_field='image_ppoi')
-    image_ppoi = PPOIField()
-
-    def __str__(self):
-        return self.name
-
-    def cropped_image_url(self):
-        return self.image.crop['300x300'].url
-
-    def get_thumbnail_url(self):
-        return self.image.thumbnail['100x100'].url
-
-
-# class Image(models.Model):
-#     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-#     name = models.CharField('Name', max_length=100)
-#     is_main_image = models.BooleanField(default=False)
-#     image = VersatileImageField('Image', upload_to='media/images/',
-#                                 default='default.jpg')
-#
-# #     image = VersatileImageField('Image', upload_to='images/',
-# #                                 width_field='width', height_field='height')
-# #     height = models.PositiveIntegerField('Image Height', blank=True, null=True)
-# #     width = models.PositiveIntegerField('Image Width', blank=True, null=True)
-#
-#     class Meta:
-#         verbose_name = 'Image'
-#         verbose_name_plural = 'Images'
-#
-#     def __str__(self):
-#         return self.name
 
 
 class Comment(models.Model):
@@ -104,25 +71,3 @@ class Comment(models.Model):
 class Subscriber(models.Model):
     """Model representing a subscriber"""
     email = models.EmailField('email address', unique=True)
-
-
-from django.contrib.sites.models import Site
-from .tasks import send_post_creation_email
-
-
-def post_post_save(sender, instance, signal, *args, **kwargs):
-    created = kwargs.get('created')
-    if created:
-        author = instance.author
-        subscribers = author.subscribers.all()
-        domain = Site.objects.get_current().domain
-        url = f'http://{domain}{instance.get_absolute_url()}'
-        for subscriber in subscribers:
-            send_post_creation_email.delay(
-                subscriber.id,
-                f'{author.first_name} {author.last_name} created a new post.',
-                f'{author.first_name} {author.last_name} created a new post. '
-                f'If you want to see it, please follow the link below '
-                f'{url}',)
-
-models.signals.post_save.connect(post_post_save, sender=Post)

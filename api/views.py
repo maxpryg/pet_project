@@ -12,15 +12,13 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser
 from django.shortcuts import get_object_or_404
 
-from blog.models import Post, MainImage, AdditionalImage, Subscriber
+from blog.models import Post, Image, Subscriber
 from api.serializers import (CommentSerializer,
                              PostSerializer,
                              AuthorSerializer,
-                             MainImageSerializer,
-                             AdditionalImageSerializer,
+                             ImageSerializer,
                              AuthorProfileSerializer,
                              SubscriberSerializer,
                              )
@@ -110,20 +108,10 @@ class AuthorProfileUpdate(generics.RetrieveUpdateAPIView):
         return obj
 
 
-class MainImageCreate(mixins.CreateModelMixin,
-                      generics.GenericAPIView):
-    queryset = MainImage.objects.all()
-    serializer_class = MainImageSerializer
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
-
-
-class AdditionalImageCreate(mixins.CreateModelMixin,
-                            generics.GenericAPIView):
-    queryset = AdditionalImage.objects.all()
-    serializer_class = AdditionalImageSerializer
+class ImageCreate(mixins.CreateModelMixin,
+                  generics.GenericAPIView):
+    queryset = Image.objects.all()
+    serializer_class = ImageSerializer
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):

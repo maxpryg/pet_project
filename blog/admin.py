@@ -1,8 +1,7 @@
 from django.contrib import admin
-#from pet_project.admin import DashboardAdminSite as admin
 from django.contrib.sites.models import Site
 
-from .models import Post, MainImage, AdditionalImage, Comment
+from .models import Post, Image
 
 
 admin.site.unregister(Site)
@@ -32,17 +31,8 @@ class PostAdmin(admin.ModelAdmin):
         model = Post
 
 
-@admin.register(MainImage)
-class MainImageAdmin(admin.ModelAdmin):
-    def get_model_perms(self, request):
-        """
-        Return empty perms dict thus hiding the model from admin index.
-        """
-        return {}
-
-
-@admin.register(AdditionalImage)
-class AdditionalImageAdmin(admin.ModelAdmin):
+@admin.register(Image)
+class ImageAdmin(admin.ModelAdmin):
     def get_model_perms(self, request):
         """
         Return empty perms dict thus hiding the model from admin index.
