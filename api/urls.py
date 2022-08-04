@@ -24,7 +24,7 @@ urlpatterns = [
          name='main_image_create'),
     path('additional_image/', views.AdditionalImageCreate.as_view(),
          name='additional_image_create'),
-    path('profile/', views.AuthorProfileUpdate.as_view(), name='comments'),
+    path('profile/', views.AuthorProfileUpdate.as_view(), name='profile'),
 ]
 
 urlpatterns += router.urls
