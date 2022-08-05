@@ -18,16 +18,10 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from blog.helper_functions import dashboard_context_data
-
 urlpatterns = [
-    #path('admin/', admin.site.urls,
-    #     {'extra_context': dashboard_context_data()}),
-    #path('admin/dashboard/', dashboard_context_data,),
-         #{'extra_context': dashboard_context_data()}),
+    path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
-    #path('blog/', include('blog.urls')),
     path('', include('blog.urls')),
     path('api/', include('api.urls')),
 ]

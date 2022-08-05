@@ -1,7 +1,9 @@
 from django.contrib import admin
 from django.contrib.sites.models import Site
+from django.urls import path
 
-from .models import Post, Image
+from .models import Post
+from blog.views import dashboard_view
 
 
 admin.site.unregister(Site)
@@ -27,14 +29,12 @@ class PostAdmin(admin.ModelAdmin):
     def block_post(self, request, queryset):
         queryset.update(blocked=True)
 
+    def get_urls(self):
+        urls = super().get_urls()
+        my_urls = [
+            path('dashboard/', self.admin_site.admin_view(dashboard_view))
+        ]
+        return my_urls + urls
+
     class Meta:
         model = Post
-
-
-@admin.register(Image)
-class ImageAdmin(admin.ModelAdmin):
-    def get_model_perms(self, request):
-        """
-        Return empty perms dict thus hiding the model from admin index.
-        """
-        return {}

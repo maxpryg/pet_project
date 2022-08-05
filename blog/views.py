@@ -1,6 +1,14 @@
 from django.views import generic
+from django.contrib.auth import get_user_model
+from django.db.models import Sum
+from django.template.response import TemplateResponse
 
-from .models import Post
+from datetime import datetime, timedelta
+
+from blog.models import Post, Comment
+
+
+user_model = get_user_model()
 
 
 class PostListView(generic.ListView):
@@ -10,3 +18,15 @@ class PostListView(generic.ListView):
 
 class PostDetailView(generic.DetailView):
     queryset = Post.objects.exclude(blocked=True)
+
+
+def dashboard_view(request):
+    context = {
+        'total_users': user_model.objects.count(),
+        'total_posts': Post.objects.count(),
+        'total_comments': Comment.objects.count(),
+        'total_likes': Post.objects.all().aggregate(Sum('likes')),
+        'registered_per_week': user_model.objects.filter(
+            created_at__gte=datetime.now()-timedelta(days=7)).count(),
+    }
+    return TemplateResponse(request, 'blog/dashboard.html', context)
