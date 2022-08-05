@@ -21,8 +21,8 @@ from django.conf.urls.static import static
 from blog.helper_functions import dashboard_context_data
 
 urlpatterns = [
-    path('admin/', admin.site.urls,
-         {'extra_context': dashboard_context_data()}),
+    #path('admin/', admin.site.urls,
+    #     {'extra_context': dashboard_context_data()}),
     #path('admin/dashboard/', dashboard_context_data,),
          #{'extra_context': dashboard_context_data()}),
     path('accounts/', include('accounts.urls')),
