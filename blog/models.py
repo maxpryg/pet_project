@@ -71,3 +71,6 @@ class Comment(models.Model):
 class Subscriber(models.Model):
     """Model representing a subscriber"""
     email = models.EmailField('email address', unique=True)
+
+    def __str__(self):
+        return f'{self.email}'
