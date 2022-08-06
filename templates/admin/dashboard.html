@@ -1,23 +1,18 @@
-{% extends "admin/base_site.html" %}
-{% load i18n static %}
+{% extends 'admin/change_list.html' %}
 
-{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}">{% endblock %}
+{% block pagination %}{% endblock %}
+{% block filters %}{% endblock filters %}
+{% block object-tools %}{% endblock object-tools %}
+{% block search %}{% endblock %}
 
-{% block coltype %}{{ block.super }}colMS{% endblock %}
-
-{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
-
-{% block breadcrumbs %}{{ block.super }}{% endblock %}
-
-{% block nav-sidebar %}{{ block.super }}{% endblock %}
-
-{% block content %}
-
-<div id="content-main">
-  {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">Home</a>
+  {% if page_name %} &rsaquo; {{ page_name }}{% endif %}
 </div>
+{% endblock %}
 
-<div class="app-{{ app.app_label }} module{% if app.app_url in request.path|urlencode %} current-app{% endif %}">
+{% block result_list %}
   <table>
     <caption>
       Dashboard
@@ -26,7 +21,7 @@
       <th scope="row">Total users: {{ total_users }}</th>
     </tr>
     <tr>
-      <th scope="row">Registered per last week: {{ registered_per_week }}</th>
+      <th scope="row">Users registered per last week: {{ registered_per_week }}</th>
     </tr>
     <tr>
       <th scope="row">Total posts: {{ total_posts}}</th>
@@ -38,8 +33,5 @@
       <th scope="row">Total comments: {{ total_comments }}</th>
     </tr>
   </table>
-</div>
-{% endblock %}
+{% endblock result_list %}
 
-{% block sidebar %}
-{% endblock %}
