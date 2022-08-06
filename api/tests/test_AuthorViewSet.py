@@ -1,4 +1,3 @@
-import json
 from datetime import date
 
 from django.urls import reverse
@@ -7,7 +6,6 @@ from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from accounts.models import CustomUser
 
 from api.serializers import AuthorSerializer
 

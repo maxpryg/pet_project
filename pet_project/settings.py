@@ -231,7 +231,8 @@ SIMPLE_JWT = {
 CELERY_BEAT_SCHEDULE = {
     'send_email_to_subscribers': {
         'task': 'api.tasks.send_email_to_subscribers',
-        "schedule": crontab(minute="0-30", hour="10,12", day_of_week="2"),
+        #"schedule": crontab(minute="*/1"),
+        "schedule": crontab(hour=10, minute=0, day_of_week=6),
     },
 }
 

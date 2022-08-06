@@ -87,7 +87,7 @@ class AuthorProfileUpdateTest(APITestCase):
     def test_anonymous_cannot_put_profile(self):
         response = self.client.patch('/api/profile/',
                                      data=json.dumps(self.full_payload,
-                                     default=str),
+                                                     default=str),
                                      content_type='application/json'
                                      )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

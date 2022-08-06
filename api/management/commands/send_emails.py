@@ -5,7 +5,7 @@ from blog.models import Subscriber
 
 
 class Command(BaseCommand):
-    help = "Commang to send emails to blog subscribers"
+    help = "Commang for sending emails to blog subscribers"
 
     def handle(self, *args, **options):
         subject = 'Regular Saturday email'

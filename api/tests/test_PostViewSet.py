@@ -160,9 +160,9 @@ class PostViewSetTest(APITestCase):
     def test_another_author_cannot_put_others_author_post(self):
         self.client.force_authenticate(user=self.author_2)
         response = self.client.put(f'/api/posts/{self.post_1.id}/',
-                                     data=json.dumps(self.partial_payload),
-                                     content_type='application/json'
-                                     )
+                                   data=json.dumps(self.partial_payload),
+                                   content_type='application/json'
+                                   )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_authenticated_can_put_post(self):
