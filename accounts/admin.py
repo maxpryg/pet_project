@@ -4,6 +4,7 @@ from django.contrib.auth.admin import UserAdmin
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from .models import CustomUser
 from blog.models import Post
+from blog.admin import admin_site
 
 
 class PostInline(admin.TabularInline):
@@ -11,7 +12,6 @@ class PostInline(admin.TabularInline):
     extra = 1
     readonly_fields = ('title', 'short_description',)
     fields = ('title', 'short_description')
-
 
     def has_add_permission(self, request, obj):
         """Remove add button"""
@@ -48,4 +48,4 @@ class CustomUserAdmin(UserAdmin):
         queryset.get().post_set.all().update(blocked=True)
 
 
-admin.site.register(CustomUser, CustomUserAdmin)
+admin_site.register(CustomUser, CustomUserAdmin)
