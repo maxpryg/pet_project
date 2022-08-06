@@ -32,7 +32,7 @@ class DashboardAdminSite(AdminSite):
         urls = super().get_urls()
         my_urls = [
             path('dashboard/', self.admin_view(self.dashboard_view),
-                name='dashboard_view')
+                 name='dashboard_view')
         ]
         return my_urls + urls
 

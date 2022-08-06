@@ -12,4 +12,5 @@ class SubscriberModelTest(TestCase):
     def test_object_string_representation(self):
         subscriber = Subscriber.objects.get(id=self.subscriber.id)
         expected_object_string_representation = f'{subscriber.email}'
-        self.assertEqual(str(subscriber), expected_object_string_representation)
+        self.assertEqual(str(subscriber),
+                         expected_object_string_representation)
