@@ -1,0 +1,45 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}">{% endblock %}
+
+{% block coltype %}{{ block.super }}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block breadcrumbs %}{{ block.super }}{% endblock %}
+
+{% block nav-sidebar %}{{ block.super }}{% endblock %}
+
+{% block content %}
+
+<div id="content-main">
+  {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
+</div>
+
+<div class="app-{{ app.app_label }} module{% if app.app_url in request.path|urlencode %} current-app{% endif %}">
+  <table>
+    <caption>
+      Dashboard
+    </caption>
+    <tr>
+      <th scope="row">Total users: {{ total_users }}</th>
+    </tr>
+    <tr>
+      <th scope="row">Registered per last week: {{ registered_per_week }}</th>
+    </tr>
+    <tr>
+      <th scope="row">Total posts: {{ total_posts}}</th>
+    </tr>
+    <tr>
+      <th scope="row">Total likes: {{ total_likes.likes__sum }}</th>
+    </tr>
+    <tr>
+      <th scope="row">Total comments: {{ total_comments }}</th>
+    </tr>
+  </table>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+{% endblock %}
