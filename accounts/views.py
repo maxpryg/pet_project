@@ -2,8 +2,7 @@ from django.shortcuts import render
 from django.views.generic import (CreateView,
                                   UpdateView,
                                   TemplateView,
-                                  RedirectView,
-                                  DetailView)
+                                  RedirectView,)
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
@@ -13,7 +12,9 @@ from django.contrib.auth import get_user_model
 
 from django.urls import reverse_lazy
 
-from .forms import CustomUserCreationForm, token_generator, LoginForm
+from accounts.forms import CustomUserCreationForm, LoginForm
+from accounts.tokens import token_generator
+from accounts.tasks import send_user_activation_email
 
 
 user_model = get_user_model()
@@ -28,7 +29,7 @@ class SignUpView(CreateView):
         to_return = super().form_valid(form)
         user = form.save()
         user.save()
-        form.send_activation_email(self.request, user)
+        send_user_activation_email.delay(user.id)
         return to_return
 
 
