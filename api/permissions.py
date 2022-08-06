@@ -16,7 +16,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         # Read permissions are allowed to any request,
         # so we'll always allow GET, HEAD or OPTIONS requests.
-        print(f'{request.method} - checking object permissions')
+        custom_actions = ['like', 'comment']
 
         if view.action in custom_actions:
             return request.user.is_authenticated
