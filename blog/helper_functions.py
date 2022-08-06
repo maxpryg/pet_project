@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.sites.models import Site
-from .tasks import send_post_creation_email
+from blog.tasks import send_post_creation_email
 
 
 from blog.models import Post
@@ -8,6 +8,7 @@ from blog.models import Post
 
 def post_post_save(sender, instance, signal, *args, **kwargs):
     created = kwargs.get('created')
+    print('in post_post_save')
     if created:
         author = instance.author
         subscribers = author.subscribers.all()
@@ -22,4 +23,4 @@ def post_post_save(sender, instance, signal, *args, **kwargs):
                 f'{url}',)
 
 
-models.signals.post_save.connect(post_post_save, sender=Post)
+models.signals.post_save.connect(post_post_save, sender=Post, weak=False)
