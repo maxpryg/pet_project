@@ -29,4 +29,5 @@ def dashboard_view(request):
         'registered_per_week': user_model.objects.filter(
             created_at__gte=datetime.now()-timedelta(days=7)).count(),
     }
-    return TemplateResponse(request, 'blog/dashboard.html', context)
+    return TemplateResponse(request, 'admin/dashboard.html', context)
+    #return TemplateResponse(request, 'admin/index.html', context)
