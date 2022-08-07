@@ -11,3 +11,4 @@ celery==5.2.1
 flower==1.0.0
 redis==4.0.2
 coverage
+whitenoise
