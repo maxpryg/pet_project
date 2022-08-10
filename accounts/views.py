@@ -26,11 +26,10 @@ class SignUpView(CreateView):
     template_name = "registration/signup.html"
 
     def form_valid(self, form):
-        to_return = super().form_valid(form)
         user = form.save()
         user.save()
         send_user_activation_email.delay(user.id)
-        return to_return
+        return super().form_valid(form)
 
 
 class CustomLoginView(LoginView):

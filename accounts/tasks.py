@@ -5,6 +5,7 @@ from django.utils.http import urlsafe_base64_encode
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ObjectDoesNotExist
 
 from pet_project.celery import app
 
@@ -26,6 +27,7 @@ def send_user_activation_email(user_id):
             'token': token_generator.make_token(user),
         })
 
+    raise ObjectDoesNotExist
     send_mail(
             subject,
             message,
