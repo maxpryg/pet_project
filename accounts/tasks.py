@@ -6,6 +6,7 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
+from django.conf import settings
 
 from pet_project.celery import app
 
@@ -31,7 +32,7 @@ def send_user_activation_email(user_id):
     send_mail(
             subject,
             message,
-            'maxpryg@gmail.com',
+            settings.DEFAULT_FROM_EMAIL,
             [user.email],
             fail_silently=False
             )

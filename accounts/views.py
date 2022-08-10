@@ -1,7 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import (CreateView,
-                                  UpdateView,
-                                  TemplateView,
+from django.views.generic import (CreateView, UpdateView, TemplateView,
                                   RedirectView,)
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth import login
@@ -9,7 +7,6 @@ from django.contrib.auth.views import LoginView
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 from django.contrib.auth import get_user_model
-
 from django.urls import reverse_lazy
 
 from accounts.forms import CustomUserCreationForm, LoginForm
@@ -39,7 +36,7 @@ class CustomLoginView(LoginView):
 
 class ProfileView(SuccessMessageMixin, UpdateView):
     model = user_model
-    fields = ['first_name', 'last_name', 'birth_date', 'city']
+    fields = ['username', 'first_name', 'last_name', 'birth_date', 'city']
     template_name = 'accounts/profile.html'
     success_message = 'Profile has been successfully updated!!!!'
 

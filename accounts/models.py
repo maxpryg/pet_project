@@ -1,25 +1,19 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.shortcuts import reverse
-# from django.contrib.sites.shortcuts import get_current_site
-
-from datetime import date
 
 from .managers import CustomUserManager
 from blog.models import Post
 
 
 class CustomUser(AbstractUser):
-    username = None
     email = models.EmailField('email address', unique=True)
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
-    city = models.CharField(max_length=30)
-    birth_date = models.DateField()
+    username = models.CharField(max_length=30, null=True, blank=True)
+    city = models.CharField(max_length=30, null=True, blank=True)
+    birth_date = models.DateField(null=True, blank=True)
     email_verified = models.BooleanField(default=False)
     blocked = models.BooleanField(default=False)
     subscribers = models.ManyToManyField('CustomUser')
-    created_at = models.DateField(default=date.today)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -34,7 +28,6 @@ class CustomUser(AbstractUser):
 
     def get_absolute_url(self):
         return reverse('accounts:profile', args=[str(self.id)])
-        pass
 
     def post_count(self):
         return Post.objects.filter(author=self).count()

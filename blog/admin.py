@@ -6,8 +6,9 @@ from django.urls import path
 from django.contrib.auth import get_user_model
 from django.db.models import Sum
 from django.template.response import TemplateResponse
+from django.utils import timezone
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from .models import Post, Comment
 
@@ -24,7 +25,8 @@ class DashboardAdminSite(AdminSite):
             'total_comments': Comment.objects.count(),
             'total_likes': Post.objects.all().aggregate(Sum('likes')),
             'registered_per_week': user_model.objects.filter(
-                created_at__gte=datetime.now()-timedelta(days=7)).count(),
+                #created_at__gte=datetime.now()-timedelta(days=7)).count(),
+                date_joined=timezone.now()-timedelta(days=7)).count(),
         }
         return TemplateResponse(request, 'admin/dashboard.html', context)
 
