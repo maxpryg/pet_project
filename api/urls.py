@@ -20,8 +20,10 @@ urlpatterns = [
          name='token_refresh'),
     path('subscribe/', views.SubscriberCreate.as_view(),
          name='subscriber_create'),
-    path('image/', views.ImageCreate.as_view(),
-         name='image_create'),
+    path('main_image/', views.MainImageCreate.as_view(),
+         name='main_image_create'),
+    path('additional_image/', views.AdditionalImageCreate.as_view(),
+         name='additional_image_create'),
     path('profile/', views.AuthorProfileUpdate.as_view(), name='profile'),
 ]
 

@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from versatileimagefield.serializers import VersatileImageFieldSerializer
 
 
-from blog.models import Comment, Post, Image, Subscriber
+from blog.models import Comment, Post, MainImage, AdditionalImage, Subscriber
 
 
 Author = get_user_model()
@@ -30,6 +30,21 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
                 self.fields.pop(field)
 
 
+class AuthorSerializer(DynamicFieldsModelSerializer):
+
+    class Meta:
+        model = Author
+        fields = ('email', 'first_name', 'last_name', 'birth_date', 'city',
+                  'posts')
+
+
+class AuthorProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Author
+        fields = ('email', 'first_name', 'last_name', 'birth_date', 'city')
+
+
 class CommentSerializer(serializers.ModelSerializer):
     author = serializers.PrimaryKeyRelatedField(required=False,
                                                 queryset=Author.objects.all())
@@ -42,50 +57,21 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    first_name = serializers.CharField(source='author.first_name',
-                                       read_only=True)
-    last_name = serializers.CharField(source='author.last_name',
-                                      read_only=True)
-    main_image = serializers.PrimaryKeyRelatedField(
-        queryset=Image.objects.all())
-    additional_images = serializers.PrimaryKeyRelatedField(
-        queryset=Image.objects.all(),
-        many=True,
-        allow_null=True
-    )
+    author = AuthorSerializer(fields=('email', 'birth_date', 'city', 'posts'),
+                              required=False)
+    main_image_url = serializers.URLField(source='main_image.image.url',
+                                          read_only=True)
 
     class Meta:
         model = Post
-        fields = ['title', 'body', 'first_name',
-                  'last_name', 'main_image', 'additional_images']
+        fields = ['title', 'body', 'short_description', 'author',
+                  'main_image_url', 'main_image']
 
-    def to_representation(self, instance):
-        """Return first 100 chars of post body"""
-        representation = super().to_representation(instance)
-        representation['body'] = representation['body'][:100]
-        main_img_id = representation.get('main_image')
-        main_img = Image.objects.get(id=main_img_id)
-        representation['main_image'] = main_img.image.url
-        return representation
+        extra_kwargs = {'body': {'write_only': True},
+                        'main_image': {'write_only': True}}
 
 
-class AuthorSerializer(DynamicFieldsModelSerializer):
-    posts = serializers.PrimaryKeyRelatedField(read_only=True, many=True,
-                                               source='post_set')
-
-    class Meta:
-        model = Author
-        fields = ('email', 'first_name', 'last_name', 'birth_date', 'city',
-                  'posts')
-
-
-class AuthorProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Author
-        fields = ('email', 'first_name', 'last_name', 'birth_date', 'city')
-
-
-class ImageSerializer(serializers.ModelSerializer):
+class MainImageSerializer(serializers.ModelSerializer):
     image = VersatileImageFieldSerializer(
         sizes=[
             ('full_size', 'url'),
@@ -94,7 +80,20 @@ class ImageSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
-        model = Image
+        model = MainImage
+        fields = ['id', 'name', 'image']
+
+
+class AdditionalImageSerializer(serializers.ModelSerializer):
+    image = VersatileImageFieldSerializer(
+        sizes=[
+            ('full_size', 'url'),
+            ('thumbnail', 'thumbnail__100x100'),
+        ]
+    )
+
+    class Meta:
+        model = AdditionalImage
         fields = ['id', 'name', 'image']
 
 

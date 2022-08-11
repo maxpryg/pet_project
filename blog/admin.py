@@ -10,7 +10,8 @@ from django.utils import timezone
 
 from datetime import timedelta
 
-from .models import Post, Comment
+from .models import Post, Comment, MainImage, AdditionalImage
+
 
 user_model = get_user_model()
 
@@ -25,7 +26,6 @@ class DashboardAdminSite(AdminSite):
             'total_comments': Comment.objects.count(),
             'total_likes': Post.objects.all().aggregate(Sum('likes')),
             'registered_per_week': user_model.objects.filter(
-                #created_at__gte=datetime.now()-timedelta(days=7)).count(),
                 date_joined=timezone.now()-timedelta(days=7)).count(),
         }
         return TemplateResponse(request, 'admin/dashboard.html', context)
@@ -42,20 +42,30 @@ class DashboardAdminSite(AdminSite):
 admin_site = DashboardAdminSite(name='pet_project_admin')
 
 
+class ImageInline(admin.TabularInline):
+    model = MainImage
+
+
+class AdditionalImageInline(admin.TabularInline):
+    model = AdditionalImage
+    extra = 1
+
+
 class PostAdmin(admin.ModelAdmin):
-    readonly_fields = ('fullname', 'short_description', 'likes_count',
-                       'comments_count')
-    list_display = ('title', 'short_description', 'fullname', 'likes_count',
-                    'comments_count', 'blocked')
+    readonly_fields = ('short_description', 'likes_count', 'comments_count',
+                       'author_full_name')
+    list_display = ('title', 'short_description', 'author_full_name',
+                    'likes_count', 'comments_count', 'blocked')
     search_fields = ('title',)
     list_filter = ('author',)
-    fields = ('author', 'title', 'body', 'main_image', 'additional_images',
-              'fullname', 'likes_count', 'comments_count', 'blocked')
+    fields = ('author', 'title', 'body', 'likes_count', 'comments_count',
+              'blocked')
     actions = ['block_post']
+    inlines = [ImageInline, AdditionalImageInline]
 
     @admin.display
-    def fullname(self, obj):
-        return obj.author.full_name()
+    def author_full_name(self, obj):
+        return obj.author.get_full_name()
 
     @admin.action(description='Block post')
     def block_post(self, request, queryset):

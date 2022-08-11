@@ -5,8 +5,8 @@
   <img src="{{ post.main_image.cropped_image_url }}" class="float-start me-3" alt="{{ post.main_image.name }}">
   <p>{{ post.body }}</p>
 
-  {% if post.additional_images %}
-    {% for image in post.additional_images.all %}
+  {% if post.additional_image %}
+    {% for image in post.additional_image.all %}
       <img src="{{ image.cropped_image_url }}" class="float-start me-3" alt="{{ image.name }}">
     {% endfor %}
   {% endif %}
@@ -14,7 +14,7 @@
   <div class="clearfix">
   </div>
   <div class="card-body">
-    <p><strong>Author: </strong>{{ post.author.full_name }}, from {{ post.author.city }}</p>
+    <p><strong>Author: </strong>{{ post.author.get_full_name }}, from {{ post.author.city }}</p>
     <p><strong>Likes: </strong>{{ post.likes }}</p>
   </div>
 
@@ -27,7 +27,7 @@
             <div class="card-body">
             <p>{{ comment.body }}</p>
             <p>
-              <span class="fw-bold"><small>Left by {{ comment.author.full_name }}"</small></span>
+              <span class="fw-bold"><small>Left by {{ comment.author.get_full_name }}"</small></span>
             </p>
             </div>
           </div>

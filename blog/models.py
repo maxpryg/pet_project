@@ -9,19 +9,12 @@ from versatileimagefield.fields import VersatileImageField, PPOIField
 
 class Post(models.Model):
     """Model representing a post."""
-    author = models.ForeignKey(settings.AUTH_USER_MODEL,
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='posts',
                                on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     body = models.TextField(max_length=10000, help_text='Enter a post text')
     likes = models.IntegerField(default=0)
     blocked = models.BooleanField(default=False)
-    main_image = models.ForeignKey('Image', on_delete=models.CASCADE,
-                                   related_name='main_image',
-                                   null=True)
-    additional_images = models.ManyToManyField('Image',
-                                               blank=True,
-                                               related_name='additional_images'
-                                               )
 
     class Meta:
         ordering = ['title']
@@ -33,6 +26,7 @@ class Post(models.Model):
         """Returns the URL to access a detail record for this post."""
         return reverse('blog:post_detail', args=[str(self.id)])
 
+    @property
     def short_description(self):
         return self.body[:100]
 
@@ -49,6 +43,9 @@ class Image(models.Model):
                                 ppoi_field='image_ppoi')
     image_ppoi = PPOIField()
 
+    class Meta:
+        abstract = True
+
     def __str__(self):
         return self.name
 
@@ -57,6 +54,16 @@ class Image(models.Model):
 
     def get_thumbnail_url(self):
         return self.image.thumbnail['100x100'].url
+
+
+class MainImage(Image):
+    post = models.OneToOneField(Post, on_delete=models.CASCADE, null=True,
+                                related_name='main_image')
+
+
+class AdditionalImage(Image):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True,
+                             related_name='additional_image')
 
 
 class Comment(models.Model):

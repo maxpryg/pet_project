@@ -14,15 +14,12 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 
-from blog.models import Post, Image, Subscriber
+from blog.models import Post, MainImage, AdditionalImage, Subscriber
 from api.permissions import IsOwnerOrReadOnly
-from api.serializers import (CommentSerializer,
-                             PostSerializer,
-                             AuthorSerializer,
-                             ImageSerializer,
-                             AuthorProfileSerializer,
-                             SubscriberSerializer,
-                             )
+from api.serializers import (CommentSerializer, PostSerializer,
+                             AuthorSerializer, MainImageSerializer,
+                             AdditionalImageSerializer,
+                             AuthorProfileSerializer, SubscriberSerializer,)
 
 
 Author = get_user_model()
@@ -32,7 +29,6 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.exclude(blocked=True)
     serializer_class = PostSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    # filterset_fields = ['author__first_name', 'author__last_name', 'author']
     filterset_fields = ['author']
     search_fields = ['title']
     pagination_class = PageNumberPagination
@@ -103,10 +99,20 @@ class AuthorProfileUpdate(generics.RetrieveUpdateAPIView):
         return obj
 
 
-class ImageCreate(mixins.CreateModelMixin,
-                  generics.GenericAPIView):
-    queryset = Image.objects.all()
-    serializer_class = ImageSerializer
+class MainImageCreate(mixins.CreateModelMixin,
+                      generics.GenericAPIView):
+    queryset = MainImage.objects.all()
+    serializer_class = MainImageSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+
+class AdditionalImageCreate(mixins.CreateModelMixin,
+                            generics.GenericAPIView):
+    queryset = AdditionalImage.objects.all()
+    serializer_class = AdditionalImageSerializer
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
