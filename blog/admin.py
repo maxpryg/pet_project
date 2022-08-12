@@ -10,7 +10,7 @@ from django.utils import timezone
 
 from datetime import timedelta
 
-from .models import Post, Comment, MainImage, AdditionalImage
+from .models import Post, Comment, AdditionalImage
 
 
 user_model = get_user_model()
@@ -42,10 +42,6 @@ class DashboardAdminSite(AdminSite):
 admin_site = DashboardAdminSite(name='pet_project_admin')
 
 
-class ImageInline(admin.TabularInline):
-    model = MainImage
-
-
 class AdditionalImageInline(admin.TabularInline):
     model = AdditionalImage
     extra = 1
@@ -58,10 +54,10 @@ class PostAdmin(admin.ModelAdmin):
                     'likes_count', 'comments_count', 'blocked')
     search_fields = ('title',)
     list_filter = ('author',)
-    fields = ('author', 'title', 'body', 'likes_count', 'comments_count',
-              'blocked')
+    fields = ('author', 'title', 'body', 'main_image', 'likes_count',
+              'comments_count', 'blocked')
     actions = ['block_post']
-    inlines = [ImageInline, AdditionalImageInline]
+    inlines = [AdditionalImageInline]
 
     @admin.display
     def author_full_name(self, obj):

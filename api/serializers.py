@@ -65,10 +65,12 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ['title', 'body', 'short_description', 'author',
-                  'main_image_url', 'main_image']
+                  'main_image_url', 'main_image', 'additional_images']
 
         extra_kwargs = {'body': {'write_only': True},
-                        'main_image': {'write_only': True}}
+                        'main_image': {'write_only': True},
+                        'additional_images': {'write_only': True}
+                        }
 
 
 class MainImageSerializer(serializers.ModelSerializer):

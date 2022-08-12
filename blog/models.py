@@ -15,6 +15,8 @@ class Post(models.Model):
     body = models.TextField(max_length=10000, help_text='Enter a post text')
     likes = models.IntegerField(default=0)
     blocked = models.BooleanField(default=False)
+    main_image = models.OneToOneField('MainImage', on_delete=models.CASCADE,
+                                      null=True, blank=True)
 
     class Meta:
         ordering = ['title']
@@ -57,13 +59,14 @@ class Image(models.Model):
 
 
 class MainImage(Image):
-    post = models.OneToOneField(Post, on_delete=models.CASCADE, null=True,
-                                related_name='main_image')
+    pass
+#    post = models.ForeignKey(Post, on_delete=models.CASCADE, unique=True,
+#                             null=True, blank=True, related_name='main_image')
 
 
 class AdditionalImage(Image):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True,
-                             related_name='additional_image')
+                             blank=True, related_name='additional_images')
 
 
 class Comment(models.Model):
