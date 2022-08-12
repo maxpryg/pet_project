@@ -54,6 +54,9 @@ class Image(models.Model):
     def cropped_image_url(self):
         return self.image.crop['400x400'].url
 
+    def additional_cropped_image_url(self):
+        return self.image.crop['200x200'].url
+
     def get_thumbnail_url(self):
         return self.image.thumbnail['100x100'].url
 
@@ -92,7 +95,7 @@ def post_post_save(sender, instance, signal, *args, **kwargs):
         author = instance.author
         subscribers = author.subscribers.all()
         domain = Site.objects.get_current().domain
-        url = f'http://{domain}{instance.get_absolute_url()}'
+        url = f'{domain}{instance.get_absolute_url()}'
         for subscriber in subscribers:
             send_post_creation_email.delay(
                 subscriber.id,

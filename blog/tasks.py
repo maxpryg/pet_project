@@ -2,6 +2,7 @@ import logging
 
 from django.core.mail import send_mail
 from django.contrib.auth import get_user_model
+from django.conf import settings
 
 from pet_project.celery import app
 
@@ -18,6 +19,6 @@ def send_post_creation_email(subscriber_id, subject, message):
     send_mail(
         subject,
         message,
-        'maxpryg@gmail.com',
+        settings.DEFAULT_FROM_EMAIL,
         [subscriber.email],
         fail_silently=False,)

@@ -8,7 +8,7 @@
     <a href="{{ post.get_absolute_url }}" class="list-group-item list-group-item-action mt-3 border-top rounded">
       <img src="{{ post.main_image.get_thumbnail_url }}" class="float-start img-thumbnail me-3" alt="{{ post.main_image.name }}">
       <h2 class="mb-1">{{ post.title }}</h5>
-      <p class="mb-1">{{ post.body|slice:":200" }} ...</p>
+      <p class="mb-1">{{ post.short_description }} ...</p>
     </a>
     {% endfor %}
   </div>

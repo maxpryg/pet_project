@@ -5,14 +5,16 @@
   <img src="{{ post.main_image.cropped_image_url }}" class="float-start me-3" alt="{{ post.main_image.name }}">
   <p>{{ post.body }}</p>
 
-  {% if post.additional_images %}
-    {% for image in post.additional_images.all %}
-      <img src="{{ image.cropped_image_url }}" class="float-start me-3" alt="{{ image.name }}">
-    {% endfor %}
-  {% endif %}
-
-  <div class="clearfix">
+  <div class="clearfix"></div>
+  <div class="float-start">
+    {% if post.additional_images %}
+        <h2 class="text-primary">Additional images</h2>
+        {% for image in post.additional_images.all %}
+        <img src="{{ image.additional_cropped_image_url }}" class="float-start me-3" alt="{{ image.name }}">
+        {% endfor %}
+    {% endif %}
   </div>
+  <div class="clearfix"></div>
   <div class="card-body">
     <p><strong>Author: </strong>{{ post.author.get_full_name }}, from {{ post.author.city }}</p>
     <p><strong>Likes: </strong>{{ post.likes }}</p>

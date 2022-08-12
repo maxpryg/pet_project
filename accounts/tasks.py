@@ -1,14 +1,13 @@
 from django.core.mail import send_mail
 from django.contrib.sites.models import Site
-from accounts.tokens import token_generator
 from django.utils.http import urlsafe_base64_encode
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
 
 from pet_project.celery import app
+from accounts.tokens import token_generator
 
 
 user_model = get_user_model()
