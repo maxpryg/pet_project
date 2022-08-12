@@ -60,8 +60,6 @@ class Image(models.Model):
 
 class MainImage(Image):
     pass
-#    post = models.ForeignKey(Post, on_delete=models.CASCADE, unique=True,
-#                             null=True, blank=True, related_name='main_image')
 
 
 class AdditionalImage(Image):

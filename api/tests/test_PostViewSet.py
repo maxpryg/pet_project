@@ -6,7 +6,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from blog.models import Post, Comment, Image
+from blog.models import Post, Comment, MainImage
 from accounts.models import CustomUser
 from api.serializers import PostSerializer, CommentSerializer
 
@@ -33,42 +33,54 @@ class PostViewSetTest(APITestCase):
             email_verified=True
         )
 
-        self.main_image = Image.objects.create(
+        self.main_image_1 = MainImage.objects.create(
             name='main_image_1',
+            image='media/test_images/test_main_image.jpg')
+
+        self.main_image_2 = MainImage.objects.create(
+            name='main_image_2',
+            image='media/test_images/test_main_image.jpg')
+
+        self.main_image_3 = MainImage.objects.create(
+            name='main_image_3',
+            image='media/test_images/test_main_image.jpg')
+
+        self.main_image_4 = MainImage.objects.create(
+            name='main_image_4',
             image='media/test_images/test_main_image.jpg')
 
         self.post_1 = Post.objects.create(
             author=self.author_1,
             title='First Post title',
             body='First Post Body',
-            main_image=self.main_image,
+            main_image=self.main_image_1,
         )
 
         self.post_2 = Post.objects.create(
             author=self.author_1,
             title='Second Post title',
             body='Second Post Body',
-            main_image=self.main_image,
+            main_image=self.main_image_2,
         )
 
         self.post_3 = Post.objects.create(
             author=self.author_1,
             title='Third Post title',
             body='Third Post Body',
-            main_image=self.main_image,
+            main_image=self.main_image_3,
         )
 
         self.payload = {
             'title': 'API Created Post title',
             'body': 'API Created Post Body',
-            'main_image': self.main_image.id,
+            'main_image': self.main_image_4.id,
             'additional_images': []
         }
 
         self.full_payload = {
             'title': 'Full API Created Post title',
             'body': 'Full API Created Post Body',
-            'main_image': self.main_image.id,
+            'main_image': self.main_image_1.id,
             'additional_images': []
         }
 

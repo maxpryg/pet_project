@@ -43,6 +43,6 @@ RUN chmod +x /start-flower
 WORKDIR /code
 
 # collect static files
-RUN python manage.py collectstatic --noinput
+#RUN python manage.py collectstatic --noinput
 
 ENTRYPOINT ["/entrypoint"]

@@ -32,12 +32,10 @@ class PostViewSet(viewsets.ModelViewSet):
     filterset_fields = ['author']
     search_fields = ['title']
     pagination_class = PageNumberPagination
-    pagination_class.page_size = 30
+    pagination_class.page_size = 3
     permission_classes = [IsOwnerOrReadOnly]
 
     def perform_create(self, serializer):
-        print('In perform create...')
-        print('ser:', serializer)
         user = self.request.user
         serializer.save(**{'author': user})
 

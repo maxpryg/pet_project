@@ -59,11 +59,6 @@ class PostModelTest(TestCase):
         post = Post.objects.get(id=self.post.id)
         field_label = post._meta.get_field('main_image').verbose_name
         self.assertEqual(field_label, 'main image')
-
-    def test_additional_images_label(self):
-        post = Post.objects.get(id=self.post.id)
-        field_label = post._meta.get_field('additional_images').verbose_name
-        self.assertEqual(field_label, 'additional images')
     # END TEST LABELS
 
     # TEST FIELD LENGTH

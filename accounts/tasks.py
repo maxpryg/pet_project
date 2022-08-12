@@ -28,7 +28,6 @@ def send_user_activation_email(user_id):
             'token': token_generator.make_token(user),
         })
 
-    raise ObjectDoesNotExist
     send_mail(
             subject,
             message,
