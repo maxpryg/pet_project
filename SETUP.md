@@ -10,11 +10,15 @@ cd pet_project
 ```
 ### Run Docker to build containers
 ```bash
-docker-compose up -- build
+docker-compose build
 ```
 ### Migrate database
 ```bash
 docker-compose exec web python manage.py migrate
+```
+### Collect static files
+```bash
+docker-compose exec web python manage.py collectstatic
 ```
 ### Run tests to see if everything works
 ```bash
@@ -22,5 +26,5 @@ docker-compose exec web python manage.py test
 ```
 ### Start development server
 ```bash
-docker-compose exec web python manage.py runserver
+docker-compose up
 ```
