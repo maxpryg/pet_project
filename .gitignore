@@ -11,6 +11,9 @@ staticfiles
 todo
 qst
 
+# coverage
+htmlcov
+
 # Backup files # 
 *.bak 
 
