@@ -23,7 +23,6 @@
   <div class="card mt-2">
     <div class="card-body">
       <h4 class="text-primary">Comments</h4>
-      {% if post.comment_set %}
         {% for comment in post.comment_set.all %}
           <div class="card mt-2">
             <div class="card-body">
@@ -33,10 +32,9 @@
             </p>
             </div>
           </div>
+        {% empty %}
+          <p>There are no comments yet.</p>
         {% endfor %}
-      {% else %}
-        <p>There are no comments yet.</p>
-      {% endif %}
     </div>
   </div>
   <p><a class="text-decoration-none fw-bold" href="{% url 'blog:post_list' %}">More posts</a></p>

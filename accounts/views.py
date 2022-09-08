@@ -2,11 +2,10 @@ from django.shortcuts import render
 from django.views.generic import (CreateView, UpdateView, TemplateView,
                                   RedirectView,)
 from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib.auth import login
+from django.contrib.auth import login, get_user_model
 from django.contrib.auth.views import LoginView
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
-from django.contrib.auth import get_user_model
 from django.urls import reverse_lazy
 
 from accounts.forms import CustomUserCreationForm, LoginForm
@@ -25,7 +24,8 @@ class SignUpView(CreateView):
     def form_valid(self, form):
         user = form.save()
         user.save()
-        send_user_activation_email.delay(user.id)
+        domain = self.request.get_host()
+        send_user_activation_email.delay(user.id, domain)
         return super().form_valid(form)
 
 
