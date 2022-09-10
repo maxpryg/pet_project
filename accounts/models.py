@@ -30,4 +30,4 @@ class CustomUser(AbstractUser):
         return reverse('accounts:profile', args=[str(self.id)])
 
     def post_count(self):
-        return Post.objects.filter(author=self).count()
+        return self.posts.count()

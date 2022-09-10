@@ -45,7 +45,9 @@ class CustomUserAdmin(UserAdmin):
     def block_user(self, request, queryset):
         queryset.update(blocked=True)
         # update block field of user's posts; block posts
-        queryset.get().post_set.all().update(blocked=True)
+        for user in queryset:
+            for post in user.posts.all():
+                post.blocked=True
 
 
 admin_site.register(CustomUser, CustomUserAdmin)

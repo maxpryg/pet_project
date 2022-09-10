@@ -13,16 +13,10 @@ class Command(BaseCommand):
         from_email = 'admin@pet_project.com'
 
         subscribers = Subscriber.objects.all()
-        if subscribers:
-            for subscriber in subscribers:
-                send_mail(subject,
-                          message,
-                          from_email,
-                          [subscriber.email],
-                          fail_silently=False,
-                          )
-            self.stdout.write(f'Email to {subscriber.email} was sent')
-
-            self.stdout.write("Every Saturday emails has been sent.")
-        else:
-            self.stdout.write("We don't have subscribers yet.")
+        for subscriber in subscribers:
+            send_mail(subject,
+                        message,
+                        from_email,
+                        [subscriber.email],
+                        fail_silently=False,
+                        )

@@ -13,24 +13,29 @@
 {% endblock %}
 
 {% block result_list %}
-  <table>
+  <table style="width:50%">
     <caption>
       Dashboard
     </caption>
     <tr>
-      <th scope="row">Total users: {{ total_users }}</th>
+      <td style="width:50%">Total users</td>
+      <td style="width:50%">{{ total_users }}</td>
     </tr>
     <tr>
-      <th scope="row">Users registered per last week: {{ registered_per_week }}</th>
+      <td>Users registered per last week</th>
+      <td>{{ registered_per_week }}</td>
     </tr>
     <tr>
-      <th scope="row">Total posts: {{ total_posts}}</th>
+      <td>Total posts</th>
+      <td>{{ total_posts }}</td>
     </tr>
     <tr>
-      <th scope="row">Total likes: {{ total_likes.likes__sum }}</th>
+      <td>Total likes</td>
+      <td>{{ total_likes.likes__sum }}</td>
     </tr>
     <tr>
-      <th scope="row">Total comments: {{ total_comments }}</th>
+      <td>Total comments</td>
+      <td>{{ total_comments }}</td>
     </tr>
   </table>
 {% endblock result_list %}

@@ -60,20 +60,20 @@ class PostViewSet(viewsets.ModelViewSet):
 
 
 class AuthorViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Author.objects.all()
+    queryset = Author.objects.exclude(blocked=True)
     serializer_class = AuthorSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['first_name', 'last_name']
 
     def list(self, request, pk=None):
-        queryset = Author.objects.all()
+        queryset = Author.objects.exclude(blocked=True)
         queryset = self.filter_queryset(queryset)
         serializer = AuthorSerializer(queryset, many=True,
                                       fields=('email', 'posts'))
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
-        queryset = Author.objects.all()
+        queryset = Author.objects.exclude(blocked=True)
         author = get_object_or_404(queryset, pk=pk)
         serializer = AuthorSerializer(author, fields=('email',))
         return Response(serializer.data)

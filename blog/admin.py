@@ -17,7 +17,6 @@ user_model = get_user_model()
 
 
 class DashboardAdminSite(AdminSite):
-    index_template = "admin/custom_index.html"
 
     def dashboard_view(self, request):
         context = {
@@ -26,7 +25,7 @@ class DashboardAdminSite(AdminSite):
             'total_comments': Comment.objects.count(),
             'total_likes': Post.objects.all().aggregate(Sum('likes')),
             'registered_per_week': user_model.objects.filter(
-                date_joined=timezone.now()-timedelta(days=7)).count(),
+                date_joined__gte=timezone.now()-timedelta(days=7)).count(),
         }
         return TemplateResponse(request, 'admin/dashboard.html', context)
 

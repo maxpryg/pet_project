@@ -37,7 +37,7 @@
         <div class="form-group mt-3">
           {{ form.birth_date.label_tag }}
           <input type="date" class="form-control {% if form.birth_date.errors %}is-invalid{% endif %}" id="id_birth_date"
-            name="birth_date" value="{{ form.birth_date.value|date:'Y-m-d' }}">
+            name="birth_date" value="{{ form.birth_date.initial|date:'Y-m-d' }}">
           {% if form.birth_date.errors %}
           <div class="invalid-feedback">{{ form.birth_date.errors }}</div>
           {% endif %}

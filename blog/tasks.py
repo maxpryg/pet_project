@@ -15,7 +15,7 @@ def send_post_creation_email(subscriber_id, subject, message):
         subscriber = UserModel.objects.get(pk=subscriber_id)
     except UserModel.DoesNotExist:
         logging.warning(f'Tried to send verification email to '
-                        f'non-existing user `{subscriber}`')
+                        f'non-existing user `{subscriber_id}`')
     send_mail(
         subject,
         message,
