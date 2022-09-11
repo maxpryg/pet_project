@@ -17,6 +17,7 @@ RUN apt-get update \
 # Requirements are installed here to ensure they will be cached.
 COPY ./requirements.txt /requirements.txt
 RUN pip install -r /requirements.txt
+COPY . /code/
 
 COPY ./compose/local/django/entrypoint /entrypoint
 # RUN sed -i 's/\r$//g' /entrypoint is used to process the line endings of the
@@ -42,7 +43,6 @@ RUN chmod +x /start-flower
 
 WORKDIR /code
 
-# collect static files
-#RUN python manage.py collectstatic --noinput
+RUN python manage.py collectstatic -v 2 --noinput
 
 ENTRYPOINT ["/entrypoint"]

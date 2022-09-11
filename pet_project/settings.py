@@ -33,7 +33,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG")
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(",")
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*,").split(",")
 
 
 # Application definition
@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    "whitenoise.runserver_nostatic",
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'accounts',
@@ -233,7 +233,6 @@ SIMPLE_JWT = {
 CELERY_BEAT_SCHEDULE = {
     'send_email_to_subscribers': {
         'task': 'api.tasks.send_email_to_subscribers',
-        #"schedule": crontab(minute="*/1"),
         "schedule": crontab(hour=10, minute=0, day_of_week=6),
     },
 }

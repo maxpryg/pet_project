@@ -21,9 +21,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_DB=pet_project_db
-      - POSTGRES_USER=pet_project_db_admin
-      - POSTGRES_PASSWORD=adminpass
+      - POSTGRES_DB=${SQL_DATABASE}
+      - POSTGRES_USER=${SQL_USER}
+      - POSTGRES_PASSWORD=${SQL_PASSWORD}
 
   redis:
     image: redis:6-alpine
