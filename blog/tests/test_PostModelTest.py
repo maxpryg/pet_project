@@ -26,7 +26,6 @@ class PostModelTest(TestCase):
         )
 
     def test_default_values(self):
-        self.assertEquals(self.post.likes, 0)
         self.assertEquals(self.post.blocked, False)
 
     # TEST LABELS
@@ -44,11 +43,6 @@ class PostModelTest(TestCase):
         post = Post.objects.get(id=self.post.id)
         field_label = post._meta.get_field('body').verbose_name
         self.assertEqual(field_label, 'body')
-
-    def test_likes_label(self):
-        post = Post.objects.get(id=self.post.id)
-        field_label = post._meta.get_field('likes').verbose_name
-        self.assertEqual(field_label, 'likes')
 
     def test_blocked_label(self):
         post = Post.objects.get(id=self.post.id)

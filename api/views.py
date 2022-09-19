@@ -53,10 +53,16 @@ class PostViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def like(self, request, pk=None):
         post = self.get_object()
-        post.likes += 1
-        post.save()
-        serializer = self.get_serializer(post)
-        return Response(serializer.data)
+        user = self.request.user
+
+        if user in post.liked.all():
+            return Response('This user has already liked this post',
+                            status=status.HTTP_400_BAD_REQUEST)
+        else:
+            post.liked.add(user)
+            serializer = self.get_serializer(post)
+            return Response(serializer.data,
+                            status=status.HTTP_200_OK)
 
 
 class AuthorViewSet(viewsets.ReadOnlyModelViewSet):

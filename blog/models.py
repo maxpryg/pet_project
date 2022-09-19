@@ -13,10 +13,10 @@ class Post(models.Model):
                                on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     body = models.TextField(max_length=10000, help_text='Enter a post text')
-    likes = models.IntegerField(default=0)
     blocked = models.BooleanField(default=False)
     main_image = models.OneToOneField('MainImage', on_delete=models.CASCADE,
                                       null=True, blank=True)
+    liked = models.ManyToManyField(settings.AUTH_USER_MODEL)
 
     class Meta:
         ordering = ['title']
@@ -33,7 +33,7 @@ class Post(models.Model):
         return self.body[:100]
 
     def likes_count(self):
-        return self.likes
+        return self.liked.count()
 
     def comments_count(self):
         return self.comment_set.count()

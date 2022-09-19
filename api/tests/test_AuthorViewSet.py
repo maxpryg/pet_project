@@ -69,21 +69,21 @@ class AuthorViewSetTest(APITestCase):
     def test_search_first_name_find_one(self):
         response = self.client.get(
             reverse('authors-list'), {'search': 'John'})
-        assert len(response.data) == 1
+        self.assertEqual(len(response.data), 1)
 
     def test_search_last_name_find_zero(self):
         response = self.client.get(
             reverse('authors-list'), {'search': 'NOTFOUND'})
-        assert len(response.data) == 0
+        self.assertEqual(len(response.data), 0)
 
     def test_authenticated_can_subscribe_to_author(self):
         subscriber = self.author_1
         self.client.force_authenticate(user=subscriber)
-        assert subscriber not in self.author_2.subscribers.all()
+        self.assertNotIn(subscriber, self.author_2.subscribers.all())
 
         response = self.client.get(
             f'/api/authors/{self.author_2.id}/subscribe/')
-        assert subscriber in self.author_2.subscribers.all()
+        self.assertIn(subscriber, self.author_2.subscribers.all())
 
         serializer = AuthorSerializer(self.author_2)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

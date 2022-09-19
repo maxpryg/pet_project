@@ -112,17 +112,17 @@ class PostViewSetTest(APITestCase):
     def test_search_title_find_all(self):
         response = self.client.get(
             reverse('post-list'), {'search': 'title'})
-        assert len(response.data['results']) == Post.objects.count()
+        self.assertEqual(len(response.data['results']), Post.objects.count())
 
     def test_search_title_find_zero(self):
         response = self.client.get(
             reverse('post-list'), {'search': 'NOTFOUND'})
-        assert len(response.data['results']) == 0
+        self.assertEqual(len(response.data['results']), 0)
 
     def test_search_title_find_one(self):
         response = self.client.get(
             reverse('post-list'), {'search': 'First'})
-        assert len(response.data['results']) == 1
+        self.assertEqual(len(response.data['results']), 1)
 
     def test_anonymous_cannot_create_post(self):
         response = self.client.post('/api/posts/',
@@ -206,11 +206,11 @@ class PostViewSetTest(APITestCase):
     def test_authenticated_can_like_post(self):
         self.client.force_authenticate(user=self.author_2)
         post = Post.objects.get(id=self.post_1.id)
-        post_likes_before_like = post.likes
+        post_likes_before_like = post.likes_count()
         response = self.client.post(f'/api/posts/{self.post_1.id}/like/')
-        post_likes_after_like = post.likes
+        post_likes_after_like = post.likes_count()
         serializer = PostSerializer(post)
-        self.assertEqual(post_likes_after_like, post_likes_before_like)
+        self.assertEqual(post_likes_after_like, post_likes_before_like+1)
         self.assertEqual(response.data, serializer.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
